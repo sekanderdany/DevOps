@@ -1,0 +1,76 @@
+docker ps -a
+docker logs 48bab7f673b3
+docker inspect 48bab7f673b3
+docker container prune -f [delete all stopped containers right away]
+docker run -d alpine ping www.docker.com
+docker logs 789b
+docker logs --since 10s 789b
+docker stop 789b
+docker rm 789b
+docker ps -a
+docker run -d -p 8085:80 nginx
+https://ed-5246272689799168.educative.run
+http://localhost:8085
+docker run -p 8088:8080 jenkins/jenkins:lts
+
+docker run -d mysql:5.7
+docker run -v /your/dir:/var/lib/mysql -d mysql:5.7
+
+Build Image
+=============
+
+Dockerfile
+-----------
+
+	FROM debian:11
+
+	CMD ["echo", "Hello world"]
+
+
+docker build -t hello .
+docker run --rm hello
+
+Dockerfile
+-----------
+
+	FROM nginx:1.15
+
+	COPY index.html /usr/share/nginx/html
+
+docker build -t webserver .
+docker run --rm -it -p 8082:80 webserver
+
+docker image ls
+docker rmi c067edac5ec1
+docker rmi webserver:latest
+
+compute.js
+----------
+	var radius = 2.0;
+	var area = Math.pow(radius, 2) * Math.PI;
+	console.log(
+		`Area of a ${radius} cm disk:
+		${area} cm²`
+	);
+	
+Dockerfile
+-----------
+
+	FROM node:11-alpine
+
+	COPY compute.js .
+
+	CMD node compute.js
+
+docker build -t jsimage .
+docker run --rm jsimage
+
+Reading a value
+-----------------
+Technology		Access
+Linux shell		$name
+.NET Core		.AddEnvironmentVariables();
+Java			System.getenv(“name”)
+Node.JS			process.env.name
+PHP				.$_ENV[“name”]
+Python			os.environ.get(‘name’)

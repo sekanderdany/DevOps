@@ -1,0 +1,52 @@
+# Vagrantfile for 3-node Kubernetes Cluster Setup
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Ubuntu 20.04 LTS (Focal Fossa)
+  config.vm.box = "ubuntu/focal64"
+  config.vm.box_check_update = false
+
+  # Master Node
+  config.vm.define "master" do |master|
+    master.vm.hostname = "master"
+    master.vm.network "private_network", ip: "192.168.0.175"
+    master.vm.provider "virtualbox" do |v|
+      v.name = "k8s-master"
+      v.memory = 2048
+      v.cpus = 2
+    end
+    master.vm.provision "file", source: "./scripts/k8s-master-setup.sh", destination: "/home/vagrant/k8s-master-setup.sh"
+    master.vm.provision "shell", inline: "chmod +x /home/vagrant/k8s-master-setup.sh"
+  end
+
+  # Worker Node 1
+  config.vm.define "worker1" do |worker1|
+    worker1.vm.hostname = "worker1"
+    worker1.vm.network "private_network", ip: "192.168.0.176"
+    worker1.vm.provider "virtualbox" do |v|
+      v.name = "k8s-worker1"
+      v.memory = 2048
+      v.cpus = 2
+    end
+    worker1.vm.provision "file", source: "./scripts/k8s-worker-setup.sh", destination: "/home/vagrant/k8s-worker-setup.sh"
+    worker1.vm.provision "file", source: "./scripts/k8s-fix-worker-kubelet.sh", destination: "/home/vagrant/k8s-fix-worker-kubelet.sh"
+    worker1.vm.provision "shell", inline: "chmod +x /home/vagrant/{k8s-worker-setup.sh,k8s-fix-worker-kubelet.sh}"
+  end
+
+  # Worker Node 2
+  config.vm.define "worker2" do |worker2|
+    worker2.vm.hostname = "worker2"
+    worker2.vm.network "private_network", ip: "192.168.0.177"
+    worker2.vm.provider "virtualbox" do |v|
+      v.name = "k8s-worker2"
+      v.memory = 2048
+      v.cpus = 2
+    end
+    worker2.vm.provision "file", source: "./scripts/k8s-worker-setup.sh", destination: "/home/vagrant/k8s-worker-setup.sh"
+    worker2.vm.provision "file", source: "./scripts/k8s-fix-worker-kubelet.sh", destination: "/home/vagrant/k8s-fix-worker-kubelet.sh"
+    worker2.vm.provision "shell", inline: "chmod +x /home/vagrant/{k8s-worker-setup.sh,k8s-fix-worker-kubelet.sh}"
+  end
+end

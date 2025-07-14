@@ -1,0 +1,41 @@
+Exposing Pod and Cluster Vars to Containers
+--------------------------------------------
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.20
+        ports:
+        - containerPort: 80
+      - name: log-sidecar
+        image: busybox:1.28
+        command: ['sh', '-c', "while true; do echo sync app logs; sleep 20; done"]
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              FieldPath: metadata.name
+        - name: POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              FieldPath: spec.serviceAccountName
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              FieldPath: status.podIP

@@ -1,0 +1,12 @@
+path_nope: "C:\Users\Not\a\great\idea"
+path_yes: 'C:\Users\Better\to\use\single\quotes'
+
+phone: 03012341234
+real_phone: "03012341234"
+
+duplicate_keys: are not allowed
+duplicate_keys: could come from changing JSON or XML to YAML
+
+question: - no answer -
+
+[not, all, languages]: would allow a key to be a list

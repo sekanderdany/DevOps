@@ -1,0 +1,19 @@
+language: yaml
+version: 1.2.2
+fun: true
+alternatives: # somewhat alternatives
+  - json
+  - xml
+---
+this is a new document
+--- 
+I can create as many in one file as I like
+---
+scalars: "with double quotes"
+escaping: "with a backslash \\ and we create new lines \n like this"
+single: 'also single quotes, especially useful if we want to use "" in our scalar'
+
+decimal: 221232
+octal: 034
+hexadecimal: 0xABC
+float: 3.3

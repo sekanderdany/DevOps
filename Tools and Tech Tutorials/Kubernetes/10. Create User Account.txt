@@ -1,0 +1,420 @@
+User Creation
+--------------
+
+1. Create Client Key with openssl
+---------------------------------
+
+# openssl
+# openssl genrsa -out dev-tom.key 2048
+
+2. Create CertificateSigningRequest for key
+---------------------------------------------
+
+# openssl req -new -key dev-tom.key -subj "/CN=tom" -out dev-tom.csr
+
+# cat dev-tom.key
+---
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEA7ed56cQ2WQ7vFtxdS/nEbYPHjZPU7/xYRUk6QaqLNVzqtUM+
+QEGzLnQ/u9xZFnNTRQdDOAl5mliy1iNzoXh7CIra/UVHcdHD6BK3SRI9y0cATEGJ
+fYCm+kYQZ6k/khISnp8CpPN6OqhyhngMlwyIp76UeIKbIJdQQt9ameHIdZs7cs+7
+afcdN8l8wPYM79TwrDnmjyVOhWchq8yF5tG7Y83Yf8QNGc6AmX4gFdb7bQ9D/t0o
+XqpPPBV2rB+Ss3i3xIsguz42hl8md5KO3AVIJt96t7RSWzNrF8qmTkd5usj6YoQW
+Nd1MS6Zr241xlSkSjOhVrefgW44CDiEJ7eFg4wIDAQABAoIBADbK10NF05aTX/GN
+81bqQZlPfohXAfX70oCyqt4w3zr9GXmB8TZva0tJrtwflc0b5pPBZnPjisRHpXi4
+VYtc6kk/YcxvRlMqkspCdUA5GU5WHfVyKq5jERIXTPPzARctXmh2Cu/eu8oCvc3G
+nG+1jUvFEwDmY8AP2YZtVrqWS8r58ftzoudnVZ3Szbgyt9mUKA/OfgFdcju4V7q4
+tXzxhxQ43bePpwg+oB3qvY1Kil/aSG+tz3+OxodjWbQ88KO/UTdsTacWXQHY9NE5
+zwp6Qkor25/6zianYtreBwOAdIJBG+BcWOetdPMsqQeYzMg5C0NMuURQPWK8n9a4
+TS9qJTECgYEA98mSdopNXIc6VpZbciuxdOGyWY27Piv4vRZXhAd8CaJVvPN2ij5/
+7g/3JKeIL8e0BByfFEvAyLTaJdDPQiELdsViEPrfWMyJ7r8iBVEOuvlNYLBJI9O4
+VTnpOYijb2qtowGZHZvcNj8igBW0aegXrwRCN2h6cRvugAmcFF5kRz8CgYEA9coM
+E/E64eDjnpogwqbmF9PHzMdrSrUKm3vFiBpOQ+yvZkSsPeXCpKRGthioA0TxRrPV
+ryuaFOQTK0eLQQ78C0Dw3tkZOaXJTNmafiP91Nhkprws1Ur5WMnAJpBk6d9lA9c6
+zJJvC+4G9BQ91ghaBZny3w8poc7NbUTuucwDwV0CgYBEc+pDVzfB/RWvv//pTYrL
+qGI1/UKiDVG9IwPwVIT+wFsBRR0VWejLopt7A9FKqdfgXuvPlpHeoJ+3XLU1Jp3d
+JPBPko7LIE5mp2TFpTv1iVPIB0tdW2sMGGCG5WmJKSZo5tMe6+TtE4n7aoOZ0mVg
+k0ObvQA+aSH9OypkMiNvzwKBgCgj8isDl3kyMBpD05vWg/daN+QioUwXGv9fjFf4
+69U9/zs1dee58TrQNVgh2LaH+NtyHTC5bzWANf04du6OEu2Hko7iZ7M5dxGc7BUz
+rY2oNW/hhXTkBKrScBYcOM7VE/s3mDu2onoRSoNsFtkwjfsiND7njAYH7xasTkx7
+nBVlAoGBAMkBNwd3zVCFwkJoNGztxvrWPwlZMHwwoQ9wvrYXVQOa84KBdFAcwX1w
+1H22bVbC/aCbQ2HMzr49Fytd+nb2wC4R6e4qMxdtnpflSqI2b5ZOzXymKYnXTx4b
+GFn9YgAtrNkJRPEo5GJx9k7J7LO1K5ufhqz6nRVIFzZncKubPRp7
+-----END RSA PRIVATE KEY-----
+---
+
+# openssl req -new -key dev-tom.key -subj "/CN=tom" -out dev-tom.csr
+
+# cat dev-tom.csr
+---
+-----BEGIN CERTIFICATE REQUEST-----
+MIICUzCCATsCAQAwDjEMMAoGA1UEAwwDdG9tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA7ed56cQ2WQ7vFtxdS/nEbYPHjZPU7/xYRUk6QaqLNVzqtUM+
+QEGzLnQ/u9xZFnNTRQdDOAl5mliy1iNzoXh7CIra/UVHcdHD6BK3SRI9y0cATEGJ
+fYCm+kYQZ6k/khISnp8CpPN6OqhyhngMlwyIp76UeIKbIJdQQt9ameHIdZs7cs+7
+afcdN8l8wPYM79TwrDnmjyVOhWchq8yF5tG7Y83Yf8QNGc6AmX4gFdb7bQ9D/t0o
+XqpPPBV2rB+Ss3i3xIsguz42hl8md5KO3AVIJt96t7RSWzNrF8qmTkd5usj6YoQW
+Nd1MS6Zr241xlSkSjOhVrefgW44CDiEJ7eFg4wIDAQABoAAwDQYJKoZIhvcNAQEL
+BQADggEBAF3BcuUH2BM3iOgOTfSY7M3VHA8GXBJ3gKwcCui6n418ZjDqHL+Jfsu0
+F/9ZjSE/vgRDVlfrhM4Kt3UU/a0weixcRYdGyKE9wzKmcxFigOBBgQFQG0ysj0ON
+4Z0fxvmI0NoEr+SWL8rAoQrySRJCyc3uGQYJuGTbC3LQ+2E3zZIm1l63ForNIREf
++Ut0VkwjQ0R6JxeWuXVc9kk1JaSstnolOPc8TFkWt0IOb508ZSpQsYAF/OqSvn4T
+ARm/HaroZgS90/G8v2yfnW7fHMBdchYbg7hwEEHFNG2pDON4VfPgjAct7kd286k7
+Cj4bcBjvOhsZXM/pNcHU1kU5nFv3lOs=
+-----END CERTIFICATE REQUEST-----
+---
+
+# cat dev-tom.csr | base64 | tr -d "\n"
+---
+LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1V6Q0NBVHNDQVFBd0RqRU1NQW9HQTFVRUF3d0RkRzl0TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQwpBUThBTUlJQkNnS0NBUUVBN2VkNTZjUTJXUTd2RnR4ZFMvbkViWVBIalpQVTcveFlSVWs2UWFxTE5WenF0VU0rClFFR3pMblEvdTl4WkZuTlRSUWRET0FsNW1saXkxaU56b1hoN0NJcmEvVVZIY2RIRDZCSzNTUkk5eTBjQVRFR0oKZllDbStrWVFaNmsva2hJU25wOENwUE42T3FoeWhuZ01sd3lJcDc2VWVJS2JJSmRRUXQ5YW1lSElkWnM3Y3MrNwphZmNkTjhsOHdQWU03OVR3ckRubWp5Vk9oV2NocTh5RjV0RzdZODNZZjhRTkdjNkFtWDRnRmRiN2JROUQvdDBvClhxcFBQQlYyckIrU3MzaTN4SXNndXo0MmhsOG1kNUtPM0FWSUp0OTZ0N1JTV3pOckY4cW1Ua2Q1dXNqNllvUVcKTmQxTVM2WnIyNDF4bFNrU2pPaFZyZWZnVzQ0Q0RpRUo3ZUZnNHdJREFRQUJvQUF3RFFZSktvWklodmNOQVFFTApCUUFEZ2dFQkFGM0JjdVVIMkJNM2lPZ09UZlNZN00zVkhBOEdYQkozZ0t3Y0N1aTZuNDE4WmpEcUhMK0pmc3UwCkYvOVpqU0UvdmdSRFZsZnJoTTRLdDNVVS9hMHdlaXhjUllkR3lLRTl3ekttY3hGaWdPQkJnUUZRRzB5c2owT04KNFowZnh2bUkwTm9FcitTV0w4ckFvUXJ5U1JKQ3ljM3VHUVlKdUdUYkMzTFErMkUzelpJbTFsNjNGb3JOSVJFZgorVXQwVmt3alEwUjZKeGVXdVhWYzlrazFKYVNzdG5vbE9QYzhURmtXdDBJT2I1MDhaU3BRc1lBRi9PcVN2bjRUCkFSbS9IYXJvWmdTOTAvRzh2Mnlmblc3ZkhNQmRjaFliZzdod0VFSEZORzJwRE9ONFZmUGdqQWN0N2tkMjg2azcKQ2o0YmNCanZPaHNaWE0vcE5jSFUxa1U1bkZ2M2xPcz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==
+---
+
+# vim dev-tom-csr.yaml
+---
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  name: dev-tom
+spec:
+  request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1V6Q0NBVHNDQVFBd0RqRU1NQW9HQTFVRUF3d0RkRzl0TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQwpBUThBTUlJQkNnS0NBUUVBN2VkNTZjUTJXUTd2RnR4ZFMvbkViWVBIalpQVTcveFlSVWs2UWFxTE5WenF0VU0rClFFR3pMblEvdTl4WkZuTlRSUWRET0FsNW1saXkxaU56b1hoN0NJcmEvVVZIY2RIRDZCSzNTUkk5eTBjQVRFR0oKZllDbStrWVFaNmsva2hJU25wOENwUE42T3FoeWhuZ01sd3lJcDc2VWVJS2JJSmRRUXQ5YW1lSElkWnM3Y3MrNwphZmNkTjhsOHdQWU03OVR3ckRubWp5Vk9oV2NocTh5RjV0RzdZODNZZjhRTkdjNkFtWDRnRmRiN2JROUQvdDBvClhxcFBQQlYyckIrU3MzaTN4SXNndXo0MmhsOG1kNUtPM0FWSUp0OTZ0N1JTV3pOckY4cW1Ua2Q1dXNqNllvUVcKTmQxTVM2WnIyNDF4bFNrU2pPaFZyZWZnVzQ0Q0RpRUo3ZUZnNHdJREFRQUJvQUF3RFFZSktvWklodmNOQVFFTApCUUFEZ2dFQkFGM0JjdVVIMkJNM2lPZ09UZlNZN00zVkhBOEdYQkozZ0t3Y0N1aTZuNDE4WmpEcUhMK0pmc3UwCkYvOVpqU0UvdmdSRFZsZnJoTTRLdDNVVS9hMHdlaXhjUllkR3lLRTl3ekttY3hGaWdPQkJnUUZRRzB5c2owT04KNFowZnh2bUkwTm9FcitTV0w4ckFvUXJ5U1JKQ3ljM3VHUVlKdUdUYkMzTFErMkUzelpJbTFsNjNGb3JOSVJFZgorVXQwVmt3alEwUjZKeGVXdVhWYzlrazFKYVNzdG5vbE9QYzhURmtXdDBJT2I1MDhaU3BRc1lBRi9PcVN2bjRUCkFSbS9IYXJvWmdTOTAvRzh2Mnlmblc3ZkhNQmRjaFliZzdod0VFSEZORzJwRE9ONFZmUGdqQWN0N2tkMjg2azcKQ2o0YmNCanZPaHNaWE0vcE5jSFUxa1U1bkZ2M2xPcz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==
+  signerName: kubernetes.io/kube-apiserver-client
+  expirationSeconds: 8640000 # 100 days
+  usages:
+  - client auth
+---
+
+# k apply -f dev-tom-csr.yaml
+
+# cat ~/.kube/config  | grep kubernetes-admin -A2
+
+---
+    user: kubernetes-admin
+  name: kubernetes-admin@kubernetes
+current-context: kubernetes-admin@kubernetes
+kind: Config
+preferences: {}
+--
+- name: kubernetes-admin
+---
+
+
+3. Approve CertificateSigningRequest
+-------------------------------------
+
+# kubectl get csr
+NAME      AGE   SIGNERNAME                            REQUESTOR          REQUESTEDDURATION   CONDITION
+dev-tom   76s   kubernetes.io/kube-apiserver-client   kubernetes-admin   100d                Pending
+# k certificate approve dev-tom
+certificatesigningrequest.certificates.k8s.io/dev-tom approved
+
+# kubectl get csr
+NAME      AGE   SIGNERNAME                            REQUESTOR          REQUESTEDDURATION   CONDITION
+dev-tom   95s   kubernetes.io/kube-apiserver-client   kubernetes-admin   100d                Approved,Issued
+
+# k get csr dev-tom -o yaml
+
+
+
+4. Get signed certificate
+--------------------------
+
+# k get csr dev-tom -o yaml
+---
+apiVersion: certificates.k8s.io/v1
+kind: CertificateSigningRequest
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"certificates.k8s.io/v1","kind":"CertificateSigningRequest","metadata":{"annotations":{},"name":"dev-tom"},"spec":{"expirationSeconds":8640000,"request":"LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1V6Q0NBVHNDQVFBd0RqRU1NQW9HQTFVRUF3d0RkRzl0TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQwpBUThBTUlJQkNnS0NBUUVBN2VkNTZjUTJXUTd2RnR4ZFMvbkViWVBIalpQVTcveFlSVWs2UWFxTE5WenF0VU0rClFFR3pMblEvdTl4WkZuTlRSUWRET0FsNW1saXkxaU56b1hoN0NJcmEvVVZIY2RIRDZCSzNTUkk5eTBjQVRFR0oKZllDbStrWVFaNmsva2hJU25wOENwUE42T3FoeWhuZ01sd3lJcDc2VWVJS2JJSmRRUXQ5YW1lSElkWnM3Y3MrNwphZmNkTjhsOHdQWU03OVR3ckRubWp5Vk9oV2NocTh5RjV0RzdZODNZZjhRTkdjNkFtWDRnRmRiN2JROUQvdDBvClhxcFBQQlYyckIrU3MzaTN4SXNndXo0MmhsOG1kNUtPM0FWSUp0OTZ0N1JTV3pOckY4cW1Ua2Q1dXNqNllvUVcKTmQxTVM2WnIyNDF4bFNrU2pPaFZyZWZnVzQ0Q0RpRUo3ZUZnNHdJREFRQUJvQUF3RFFZSktvWklodmNOQVFFTApCUUFEZ2dFQkFGM0JjdVVIMkJNM2lPZ09UZlNZN00zVkhBOEdYQkozZ0t3Y0N1aTZuNDE4WmpEcUhMK0pmc3UwCkYvOVpqU0UvdmdSRFZsZnJoTTRLdDNVVS9hMHdlaXhjUllkR3lLRTl3ekttY3hGaWdPQkJnUUZRRzB5c2owT04KNFowZnh2bUkwTm9FcitTV0w4ckFvUXJ5U1JKQ3ljM3VHUVlKdUdUYkMzTFErMkUzelpJbTFsNjNGb3JOSVJFZgorVXQwVmt3alEwUjZKeGVXdVhWYzlrazFKYVNzdG5vbE9QYzhURmtXdDBJT2I1MDhaU3BRc1lBRi9PcVN2bjRUCkFSbS9IYXJvWmdTOTAvRzh2Mnlmblc3ZkhNQmRjaFliZzdod0VFSEZORzJwRE9ONFZmUGdqQWN0N2tkMjg2azcKQ2o0YmNCanZPaHNaWE0vcE5jSFUxa1U1bkZ2M2xPcz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==","signerName":"kubernetes.io/kube-apiserver-client","usages":["client auth"]}}
+  creationTimestamp: "2025-04-02T20:45:40Z"
+  name: dev-tom
+  resourceVersion: "235863"
+  uid: 441e9547-02a7-4889-bdae-620d90df06f7
+spec:
+  expirationSeconds: 8640000
+  groups:
+  - kubeadm:cluster-admins
+  - system:authenticated
+  request: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJQ1V6Q0NBVHNDQVFBd0RqRU1NQW9HQTFVRUF3d0RkRzl0TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQwpBUThBTUlJQkNnS0NBUUVBN2VkNTZjUTJXUTd2RnR4ZFMvbkViWVBIalpQVTcveFlSVWs2UWFxTE5WenF0VU0rClFFR3pMblEvdTl4WkZuTlRSUWRET0FsNW1saXkxaU56b1hoN0NJcmEvVVZIY2RIRDZCSzNTUkk5eTBjQVRFR0oKZllDbStrWVFaNmsva2hJU25wOENwUE42T3FoeWhuZ01sd3lJcDc2VWVJS2JJSmRRUXQ5YW1lSElkWnM3Y3MrNwphZmNkTjhsOHdQWU03OVR3ckRubWp5Vk9oV2NocTh5RjV0RzdZODNZZjhRTkdjNkFtWDRnRmRiN2JROUQvdDBvClhxcFBQQlYyckIrU3MzaTN4SXNndXo0MmhsOG1kNUtPM0FWSUp0OTZ0N1JTV3pOckY4cW1Ua2Q1dXNqNllvUVcKTmQxTVM2WnIyNDF4bFNrU2pPaFZyZWZnVzQ0Q0RpRUo3ZUZnNHdJREFRQUJvQUF3RFFZSktvWklodmNOQVFFTApCUUFEZ2dFQkFGM0JjdVVIMkJNM2lPZ09UZlNZN00zVkhBOEdYQkozZ0t3Y0N1aTZuNDE4WmpEcUhMK0pmc3UwCkYvOVpqU0UvdmdSRFZsZnJoTTRLdDNVVS9hMHdlaXhjUllkR3lLRTl3ekttY3hGaWdPQkJnUUZRRzB5c2owT04KNFowZnh2bUkwTm9FcitTV0w4ckFvUXJ5U1JKQ3ljM3VHUVlKdUdUYkMzTFErMkUzelpJbTFsNjNGb3JOSVJFZgorVXQwVmt3alEwUjZKeGVXdVhWYzlrazFKYVNzdG5vbE9QYzhURmtXdDBJT2I1MDhaU3BRc1lBRi9PcVN2bjRUCkFSbS9IYXJvWmdTOTAvRzh2Mnlmblc3ZkhNQmRjaFliZzdod0VFSEZORzJwRE9ONFZmUGdqQWN0N2tkMjg2azcKQ2o0YmNCanZPaHNaWE0vcE5jSFUxa1U1bkZ2M2xPcz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUgUkVRVUVTVC0tLS0tCg==
+  signerName: kubernetes.io/kube-apiserver-client
+  usages:
+  - client auth
+  username: kubernetes-admin
+status:
+  certificate: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5RENDQWR5Z0F3SUJBZ0lSQVBjQmZ0a0laNDE2b1J3NytSOTNHR1l3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBME1ESXlNRFF5TVRKYUZ3MHlOVEEzTVRFeQpNRFF5TVRKYU1BNHhEREFLQmdOVkJBTVRBM1J2YlRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDCkFRb0NnZ0VCQU8zbmVlbkVObGtPN3hiY1hVdjV4RzJEeDQyVDFPLzhXRVZKT2tHcWl6VmM2clZEUGtCQnN5NTAKUDd2Y1dSWnpVMFVIUXpnSmVacFlzdFlqYzZGNGV3aUsydjFGUjNIUncrZ1N0MGtTUGN0SEFFeEJpWDJBcHZwRwpFR2VwUDVJU0VwNmZBcVR6ZWpxb2NvWjRESmNNaUtlK2xIaUNteUNYVUVMZldwbmh5SFdiTzNMUHUybjNIVGZKCmZNRDJETy9VOEt3NTVvOGxUb1ZuSWF2TWhlYlJ1MlBOMkgvRURSbk9nSmwrSUJYVysyMFBRLzdkS0Y2cVR6d1YKZHF3ZmtyTjR0OFNMSUxzK05vWmZKbmVTanR3RlNDYmZlcmUwVWxzemF4ZktwazVIZWJySSttS0VGalhkVEV1bQphOXVOY1pVcEVvem9WYTNuNEZ1T0FnNGhDZTNoWU9NQ0F3RUFBYU5HTUVRd0V3WURWUjBsQkF3d0NnWUlLd1lCCkJRVUhBd0l3REFZRFZSMFRBUUgvQkFJd0FEQWZCZ05WSFNNRUdEQVdnQlQ0ek8zS1J0TVdtV3RMOTdVQ0lpMTcKQ3FUVXlUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFwWjRUN1lwbDJ1ckxtTHBEVkVTKzRBTDc5RWZtYmgxcApKdXNIMW9uTjBJU0VGaUVNbE5tazg2RTNoUGRxTnZEeUpVRmRVT1ZuUVhUbDVvQitaRGtCVnlBdyt6by9MN2ZVCnJEK0ZENGVid0xuWHovYWlTN09HdEVpUUUwQk5pelBHdjlhOWdzM3pnZndGRmJyV0dGUkxjYXpOejZmMFhjSk0KTmF0WXhSMFJsdlZVcWhpdFB3RzRoaFdIU3lTVXdSdi9MMURuWjlEbVMwcDJOY0ZaU291ZFVEYy9lZEN6UVZpRApRTGFXNnhVbGR2aVA4dUxSc2wxNXdnd3F6SW0xV2QzTHRrYklpVXB0bWhJemhRQU5NdEI3cEwwNFNQbFZjZ05pCnp4VGVRVktJbDZVYVMvdFBsUHdMUnBvRGZuTS9yeDhhVFB5OUduNzJIQ3BkS2NHd1lvdjhWUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+  conditions:
+  - lastTransitionTime: "2025-04-02T20:47:12Z"
+    lastUpdateTime: "2025-04-02T20:47:12Z"
+    message: This CSR was approved by kubectl certificate approve.
+    reason: KubectlApprove
+    status: "True"
+    type: Approved
+---
+
+
+# echo 'LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5RENDQWR5Z0F3SUJBZ0lSQVBjQmZ0a0laNDE2b1J3NytSOTNHR1l3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBME1ESXlNRFF5TVRKYUZ3MHlOVEEzTVRFeQpNRFF5TVRKYU1BNHhEREFLQmdOVkJBTVRBM1J2YlRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDCkFRb0NnZ0VCQU8zbmVlbkVObGtPN3hiY1hVdjV4RzJEeDQyVDFPLzhXRVZKT2tHcWl6VmM2clZEUGtCQnN5NTAKUDd2Y1dSWnpVMFVIUXpnSmVacFlzdFlqYzZGNGV3aUsydjFGUjNIUncrZ1N0MGtTUGN0SEFFeEJpWDJBcHZwRwpFR2VwUDVJU0VwNmZBcVR6ZWpxb2NvWjRESmNNaUtlK2xIaUNteUNYVUVMZldwbmh5SFdiTzNMUHUybjNIVGZKCmZNRDJETy9VOEt3NTVvOGxUb1ZuSWF2TWhlYlJ1MlBOMkgvRURSbk9nSmwrSUJYVysyMFBRLzdkS0Y2cVR6d1YKZHF3ZmtyTjR0OFNMSUxzK05vWmZKbmVTanR3RlNDYmZlcmUwVWxzemF4ZktwazVIZWJySSttS0VGalhkVEV1bQphOXVOY1pVcEVvem9WYTNuNEZ1T0FnNGhDZTNoWU9NQ0F3RUFBYU5HTUVRd0V3WURWUjBsQkF3d0NnWUlLd1lCCkJRVUhBd0l3REFZRFZSMFRBUUgvQkFJd0FEQWZCZ05WSFNNRUdEQVdnQlQ0ek8zS1J0TVdtV3RMOTdVQ0lpMTcKQ3FUVXlUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFwWjRUN1lwbDJ1ckxtTHBEVkVTKzRBTDc5RWZtYmgxcApKdXNIMW9uTjBJU0VGaUVNbE5tazg2RTNoUGRxTnZEeUpVRmRVT1ZuUVhUbDVvQitaRGtCVnlBdyt6by9MN2ZVCnJEK0ZENGVid0xuWHovYWlTN09HdEVpUUUwQk5pelBHdjlhOWdzM3pnZndGRmJyV0dGUkxjYXpOejZmMFhjSk0KTmF0WXhSMFJsdlZVcWhpdFB3RzRoaFdIU3lTVXdSdi9MMURuWjlEbVMwcDJOY0ZaU291ZFVEYy9lZEN6UVZpRApRTGFXNnhVbGR2aVA4dUxSc2wxNXdnd3F6SW0xV2QzTHRrYklpVXB0bWhJemhRQU5NdEI3cEwwNFNQbFZjZ05pCnp4VGVRVktJbDZVYVMvdFBsUHdMUnBvRGZuTS9yeDhhVFB5OUduNzJIQ3BkS2NHd1lvdjhWUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K' | base64 --decode > dev-tom.crt
+
+# cat dev-tom.crt
+-----BEGIN CERTIFICATE-----
+MIIC9DCCAdygAwIBAgIRAPcBftkIZ416oRw7+R93GGYwDQYJKoZIhvcNAQELBQAw
+FTETMBEGA1UEAxMKa3ViZXJuZXRlczAeFw0yNTA0MDIyMDQyMTJaFw0yNTA3MTEy
+MDQyMTJaMA4xDDAKBgNVBAMTA3RvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC
+AQoCggEBAO3neenENlkO7xbcXUv5xG2Dx42T1O/8WEVJOkGqizVc6rVDPkBBsy50
+P7vcWRZzU0UHQzgJeZpYstYjc6F4ewiK2v1FR3HRw+gSt0kSPctHAExBiX2ApvpG
+EGepP5ISEp6fAqTzejqocoZ4DJcMiKe+lHiCmyCXUELfWpnhyHWbO3LPu2n3HTfJ
+fMD2DO/U8Kw55o8lToVnIavMhebRu2PN2H/EDRnOgJl+IBXW+20PQ/7dKF6qTzwV
+dqwfkrN4t8SLILs+NoZfJneSjtwFSCbfere0UlszaxfKpk5HebrI+mKEFjXdTEum
+a9uNcZUpEozoVa3n4FuOAg4hCe3hYOMCAwEAAaNGMEQwEwYDVR0lBAwwCgYIKwYB
+BQUHAwIwDAYDVR0TAQH/BAIwADAfBgNVHSMEGDAWgBT4zO3KRtMWmWtL97UCIi17
+CqTUyTANBgkqhkiG9w0BAQsFAAOCAQEApZ4T7Ypl2urLmLpDVES+4AL79Efmbh1p
+JusH1onN0ISEFiEMlNmk86E3hPdqNvDyJUFdUOVnQXTl5oB+ZDkBVyAw+zo/L7fU
+rD+FD4ebwLnXz/aiS7OGtEiQE0BNizPGv9a9gs3zgfwFFbrWGFRLcazNz6f0XcJM
+NatYxR0RlvVUqhitPwG4hhWHSySUwRv/L1DnZ9DmS0p2NcFZSoudUDc/edCzQViD
+QLaW6xUldviP8uLRsl15wgwqzIm1Wd3LtkbIiUptmhIzhQANMtB7pL04SPlVcgNi
+zxTeQVKIl6UaS/tPlPwLRpoDfnM/rx8aTPy9Gn72HCpdKcGwYov8VQ==
+-----END CERTIFICATE-----
+
+
+===========================
+Sequential Commands
+===========================
+
+# openssl genrsa -out dev-tom.key 2048
+# openssl req -new -key dev-tom.key -subj "/CN=tom" -out dev-tom.csr
+# cat dev-tom.csr
+# cat dev-tom.csr | base64 | tr -d "\n"
+# vim dev-tom-csr.yaml [paste the base64 encoded value in request]
+# k apply -f dev-tom-csr.yaml
+# k get csr
+# cat ~/.kube/config  | grep kubernetes-admin -A2
+# k certificate approve dev-tom
+# k get csr
+# k get csr dev-tom -o yaml
+# echo 'LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5RENDQWR5Z0F3SUJBZ0lSQVBjQmZ0a0laNDE2b1J3NytSOTNHR1l3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBME1ESXlNRFF5TVRKYUZ3MHlOVEEzTVRFeQpNRFF5TVRKYU1BNHhEREFLQmdOVkJBTVRBM1J2YlRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDCkFRb0NnZ0VCQU8zbmVlbkVObGtPN3hiY1hVdjV4RzJEeDQyVDFPLzhXRVZKT2tHcWl6VmM2clZEUGtCQnN5NTAKUDd2Y1dSWnpVMFVIUXpnSmVacFlzdFlqYzZGNGV3aUsydjFGUjNIUncrZ1N0MGtTUGN0SEFFeEJpWDJBcHZwRwpFR2VwUDVJU0VwNmZBcVR6ZWpxb2NvWjRESmNNaUtlK2xIaUNteUNYVUVMZldwbmh5SFdiTzNMUHUybjNIVGZKCmZNRDJETy9VOEt3NTVvOGxUb1ZuSWF2TWhlYlJ1MlBOMkgvRURSbk9nSmwrSUJYVysyMFBRLzdkS0Y2cVR6d1YKZHF3ZmtyTjR0OFNMSUxzK05vWmZKbmVTanR3RlNDYmZlcmUwVWxzemF4ZktwazVIZWJySSttS0VGalhkVEV1bQphOXVOY1pVcEVvem9WYTNuNEZ1T0FnNGhDZTNoWU9NQ0F3RUFBYU5HTUVRd0V3WURWUjBsQkF3d0NnWUlLd1lCCkJRVUhBd0l3REFZRFZSMFRBUUgvQkFJd0FEQWZCZ05WSFNNRUdEQVdnQlQ0ek8zS1J0TVdtV3RMOTdVQ0lpMTcKQ3FUVXlUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFwWjRUN1lwbDJ1ckxtTHBEVkVTKzRBTDc5RWZtYmgxcApKdXNIMW9uTjBJU0VGaUVNbE5tazg2RTNoUGRxTnZEeUpVRmRVT1ZuUVhUbDVvQitaRGtCVnlBdyt6by9MN2ZVCnJEK0ZENGVid0xuWHovYWlTN09HdEVpUUUwQk5pelBHdjlhOWdzM3pnZndGRmJyV0dGUkxjYXpOejZmMFhjSk0KTmF0WXhSMFJsdlZVcWhpdFB3RzRoaFdIU3lTVXdSdi9MMURuWjlEbVMwcDJOY0ZaU291ZFVEYy9lZEN6UVZpRApRTGFXNnhVbGR2aVA4dUxSc2wxNXdnd3F6SW0xV2QzTHRrYklpVXB0bWhJemhRQU5NdEI3cEwwNFNQbFZjZ05pCnp4VGVRVktJbDZVYVMvdFBsUHdMUnBvRGZuTS9yeDhhVFB5OUduNzJIQ3BkS2NHd1lvdjhWUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K' | base64 --decode > dev-tom.crt
+
+# cat dev-tom.crt
+
+
+==========================
+Connect to K8s Cluster
+==========================
+
+# k options
+# k cluster-info
+
+Kubernetes control plane is running at https://192.168.0.175:6443
+CoreDNS is running at https://192.168.0.175:6443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+
+# kubectl --server https://192.168.0.175:6443 \
+	> --certificate-authority /etc/kubernetes/pki/ca.crt \
+	> --client-certificate dev-tom.crt \
+	> --client-key dev-tom.key \
+	> get pod
+
+
+Error in configuration:
+* client-cert-data and client-cert are both specified for kubernetes-admin. client-cert-data will override.
+* client-key-data and client-key are both specified for kubernetes-admin; client-key-data will override
+
+[client-cert-data and client-key-data are mentioned in ~/.kube/config]
+
+===================================================
+Temporary Test [!! Careful Only for test purpose]
+===================================================
+
+# mv ~/.kube/config . [!! Careful Only for test purpose]
+
+# kubectl --server https://192.168.0.175:6443 --certificate-authority /etc/kubernetes/pki/ca.crt --client-certificate dev-tom.crt --client-key dev-tom.key get pod
+
+
+Error from server (Forbidden): pods is forbidden: User "tom" cannot list resource "pods" in API group "" in the namespace "default"
+
+[Successful but error due to user has no permission]
+
+Make conf file for specific user
+---------------------------------
+
+# cp config dev-tom.conf
+
+# cat dev-tom.conf
+
+---
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJU2h4SkllQnltTHN3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBek1qZ3dNRE16TWpWYUZ3MHpOVEF6TWpZd01ETTRNalZhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUNuY0Y1MythTnZPYUdNUHVkTzJYRE5QV0FkdEJWY0RKdGovMmJLdjhJZndGZlBDb1BnazREcXAzbGYKa2d0RDFQcFUvUEZmTDFJOTIxVGxWVEdyemdMRFZ4UzZsVkxmbFRDcFVEdTcrb0hhUTZtNzNUS3RuT0JHVDNGQQpJdHNqd25sKzhFUnlsYVdHMFE5KzlaY2RMbnJMenRZai9yVWlTNTRsR3QxcDR0M2RXM28xL3lrUFFTRHpHWS8yCjdEZmMvbmJIdzhUSklRNnF3YWdheUQvTUorUi9LL0VwSzFqWURKMzF2OTdPZkNSUEQ4L25qcm9NVkxtQzE5VnIKeXl5VEFFZ0s5eVYybnlNVVZuQlpKc2VlcDA1Mm9pWUJ3cUt5enptQVhMSzY3TFdNQjlIWXRqL09EWFU0eFIzLwo5SmVCaFU3REZnOFRaVm9OblZaMUUxVWZmZGk3QWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJUNHpPM0tSdE1XbVd0TDk3VUNJaTE3Q3FUVXlUQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ2prWUpTbUdXNQpPRGtWMXF6b0dhQnV6dEFWbndKdEVxWDl2VUJhTkNkNHFKamZGVkV4OG9ObzlFR0RLbXVsZUxNSklsdXE5TzN1CllaUnZXWGgxc0VnZGNYbVAwWkpwMjdoZXlabTc2SGxoenhpZU1RdTkzNWdrQkJiNEphamVubnI5OVVZdTZIWEoKS2ZoOE1vS2wvSi9zblQ1RGR3YW9SSklmLzVnekpLTGdodzNvQmVYQ21TcGlLYklMOGd2VkZUZTgzNm0vWklzcQpXaHd1M05RK2VGbTMvOVBkRzByS3N2MkVBQ1hYdStyZUYxYm1TT3JKQXhCckVORU5UMVd2TXpYM0QyWDZhcUJPCkt4OVZ2cFZyWllpVGZ1eHRwOWNUN0ZoSmdPUkxjaXBxYzlKTHBHbzVqVnNsbDcwaElPZ3lSU3M1WEJnVDFVTmsKbjk0WG1oeVlLd2tKCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    server: https://192.168.0.175:6443
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: dev-tom
+  name: dev-tom@kubernetes
+current-context: dev-tom@kubernetes
+kind: Config
+preferences: {}
+users:
+- name: dev-tom
+  user:
+    client-certificate: /home/dany/dev-tom.crt
+    client-key: /home/dany/dev-tom.key
+---
+
+[Changed 'client-certificate-data' to 'client-certificate' and 'client-key-data' to 'client-key']
+
+# k --kubeconfig dev-tom.conf get pod
+Error from server (Forbidden): pods is forbidden: User "tom" cannot list resource "pods" in API group "" in the namespace "default"
+
+[Successful but error due to user has no permission]
+
+
+Now we can give: dev-tom.conf, dev-tom.crt, dev-tom.key to user Tom and he can paste these file in his laptop's .kube/ and access the cluster
+
+On Tom's laptop
+----------------
+
+# cp dev-tom.conf ~/.kube/config
+
+# k get pods [works without specifying --kubeconfig]
+
+[In order to use only 1 file - 'config' instead of 3 file dev-tom.conf, dev-tom.crt, dev-tom.key - 
+
+	- Change 'client-certificate' to 'client-certificate-data' 
+	- Change 'client-key' 'client-key-data'
+	- paste base64 encoded values
+]
+
+
+# vi ~/.kube/config
+
+# base64 dev-tom.crt | tr -d "\n"
+LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5RENDQWR5Z0F3SUJBZ0lSQVBjQmZ0a0laNDE2b1J3NytSOTNHR1l3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBME1ESXlNRFF5TVRKYUZ3MHlOVEEzTVRFeQpNRFF5TVRKYU1BNHhEREFLQmdOVkJBTVRBM1J2YlRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDCkFRb0NnZ0VCQU8zbmVlbkVObGtPN3hiY1hVdjV4RzJEeDQyVDFPLzhXRVZKT2tHcWl6VmM2clZEUGtCQnN5NTAKUDd2Y1dSWnpVMFVIUXpnSmVacFlzdFlqYzZGNGV3aUsydjFGUjNIUncrZ1N0MGtTUGN0SEFFeEJpWDJBcHZwRwpFR2VwUDVJU0VwNmZBcVR6ZWpxb2NvWjRESmNNaUtlK2xIaUNteUNYVUVMZldwbmh5SFdiTzNMUHUybjNIVGZKCmZNRDJETy9VOEt3NTVvOGxUb1ZuSWF2TWhlYlJ1MlBOMkgvRURSbk9nSmwrSUJYVysyMFBRLzdkS0Y2cVR6d1YKZHF3ZmtyTjR0OFNMSUxzK05vWmZKbmVTanR3RlNDYmZlcmUwVWxzemF4ZktwazVIZWJySSttS0VGalhkVEV1bQphOXVOY1pVcEVvem9WYTNuNEZ1T0FnNGhDZTNoWU9NQ0F3RUFBYU5HTUVRd0V3WURWUjBsQkF3d0NnWUlLd1lCCkJRVUhBd0l3REFZRFZSMFRBUUgvQkFJd0FEQWZCZ05WSFNNRUdEQVdnQlQ0ek8zS1J0TVdtV3RMOTdVQ0lpMTcKQ3FUVXlUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFwWjRUN1lwbDJ1ckxtTHBEVkVTKzRBTDc5RWZtYmgxcApKdXNIMW9uTjBJU0VGaUVNbE5tazg2RTNoUGRxTnZEeUpVRmRVT1ZuUVhUbDVvQitaRGtCVnlBdyt6by9MN2ZVCnJEK0ZENGVid0xuWHovYWlTN09HdEVpUUUwQk5pelBHdjlhOWdzM3pnZndGRmJyV0dGUkxjYXpOejZmMFhjSk0KTmF0WXhSMFJsdlZVcWhpdFB3RzRoaFdIU3lTVXdSdi9MMURuWjlEbVMwcDJOY0ZaU291ZFVEYy9lZEN6UVZpRApRTGFXNnhVbGR2aVA4dUxSc2wxNXdnd3F6SW0xV2QzTHRrYklpVXB0bWhJemhRQU5NdEI3cEwwNFNQbFZjZ05pCnp4VGVRVktJbDZVYVMvdFBsUHdMUnBvRGZuTS9yeDhhVFB5OUduNzJIQ3BkS2NHd1lvdjhWUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+
+#  base64 dev-tom.key | tr -d "\n"
+LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBN2VkNTZjUTJXUTd2RnR4ZFMvbkViWVBIalpQVTcveFlSVWs2UWFxTE5WenF0VU0rClFFR3pMblEvdTl4WkZuTlRSUWRET0FsNW1saXkxaU56b1hoN0NJcmEvVVZIY2RIRDZCSzNTUkk5eTBjQVRFR0oKZllDbStrWVFaNmsva2hJU25wOENwUE42T3FoeWhuZ01sd3lJcDc2VWVJS2JJSmRRUXQ5YW1lSElkWnM3Y3MrNwphZmNkTjhsOHdQWU03OVR3ckRubWp5Vk9oV2NocTh5RjV0RzdZODNZZjhRTkdjNkFtWDRnRmRiN2JROUQvdDBvClhxcFBQQlYyckIrU3MzaTN4SXNndXo0MmhsOG1kNUtPM0FWSUp0OTZ0N1JTV3pOckY4cW1Ua2Q1dXNqNllvUVcKTmQxTVM2WnIyNDF4bFNrU2pPaFZyZWZnVzQ0Q0RpRUo3ZUZnNHdJREFRQUJBb0lCQURiSzEwTkYwNWFUWC9HTgo4MWJxUVpsUGZvaFhBZlg3MG9DeXF0NHczenI5R1htQjhUWnZhMHRKcnR3ZmxjMGI1cFBCWm5QamlzUkhwWGk0ClZZdGM2a2svWWN4dlJsTXFrc3BDZFVBNUdVNVdIZlZ5S3E1akVSSVhUUFB6QVJjdFhtaDJDdS9ldThvQ3ZjM0cKbkcrMWpVdkZFd0RtWThBUDJZWnRWcnFXUzhyNThmdHpvdWRuVlozU3piZ3l0OW1VS0EvT2ZnRmRjanU0VjdxNAp0WHp4aHhRNDNiZVBwd2crb0IzcXZZMUtpbC9hU0crdHozK094b2RqV2JRODhLTy9VVGRzVGFjV1hRSFk5TkU1Cnp3cDZRa29yMjUvNnppYW5ZdHJlQndPQWRJSkJHK0JjV09ldGRQTXNxUWVZek1nNUMwTk11VVJRUFdLOG45YTQKVFM5cUpURUNnWUVBOThtU2RvcE5YSWM2VnBaYmNpdXhkT0d5V1kyN1BpdjR2UlpYaEFkOENhSlZ2UE4yaWo1Lwo3Zy8zSktlSUw4ZTBCQnlmRkV2QXlMVGFKZERQUWlFTGRzVmlFUHJmV015SjdyOGlCVkVPdXZsTllMQkpJOU80ClZUbnBPWWlqYjJxdG93R1pIWnZjTmo4aWdCVzBhZWdYcndSQ04yaDZjUnZ1Z0FtY0ZGNWtSejhDZ1lFQTljb00KRS9FNjRlRGpucG9nd3FibUY5UEh6TWRyU3JVS20zdkZpQnBPUSt5dlprU3NQZVhDcEtSR3RoaW9BMFR4UnJQVgpyeXVhRk9RVEswZUxRUTc4QzBEdzN0a1pPYVhKVE5tYWZpUDkxTmhrcHJ3czFVcjVXTW5BSnBCazZkOWxBOWM2CnpKSnZDKzRHOUJROTFnaGFCWm55M3c4cG9jN05iVVR1dWN3RHdWMENnWUJFYytwRFZ6ZkIvUld2di8vcFRZckwKcUdJMS9VS2lEVkc5SXdQd1ZJVCt3RnNCUlIwVldlakxvcHQ3QTlGS3FkZmdYdXZQbHBIZW9KKzNYTFUxSnAzZApKUEJQa283TElFNW1wMlRGcFR2MWlWUElCMHRkVzJzTUdHQ0c1V21KS1NabzV0TWU2K1R0RTRuN2FvT1owbVZnCmswT2J2UUErYVNIOU95cGtNaU52endLQmdDZ2o4aXNEbDNreU1CcEQwNXZXZy9kYU4rUWlvVXdYR3Y5ZmpGZjQKNjlVOS96czFkZWU1OFRyUU5WZ2gyTGFIK050eUhUQzVieldBTmYwNGR1Nk9FdTJIa283aVo3TTVkeEdjN0JVegpyWTJvTlcvaGhYVGtCS3JTY0JZY09NN1ZFL3MzbUR1Mm9ub1JTb05zRnRrd2pmc2lORDduakFZSDd4YXNUa3g3Cm5CVmxBb0dCQU1rQk53ZDN6VkNGd2tKb05HenR4dnJXUHdsWk1Id3dvUTl3dnJZWFZRT2E4NEtCZEZBY3dYMXcKMUgyMmJWYkMvYUNiUTJITXpyNDlGeXRkK25iMndDNFI2ZTRxTXhkdG5wZmxTcUkyYjVaT3pYeW1LWW5YVHg0YgpHRm45WWdBdHJOa0pSUEVvNUdKeDlrN0o3TE8xSzV1ZmhxejZuUlZJRnpabmNLdWJQUnA3Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+
+# vi ~/.kube/config
+
+cat ~/.kube/config
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJU2h4SkllQnltTHN3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBek1qZ3dNRE16TWpWYUZ3MHpOVEF6TWpZd01ETTRNalZhTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUNuY0Y1MythTnZPYUdNUHVkTzJYRE5QV0FkdEJWY0RKdGovMmJLdjhJZndGZlBDb1BnazREcXAzbGYKa2d0RDFQcFUvUEZmTDFJOTIxVGxWVEdyemdMRFZ4UzZsVkxmbFRDcFVEdTcrb0hhUTZtNzNUS3RuT0JHVDNGQQpJdHNqd25sKzhFUnlsYVdHMFE5KzlaY2RMbnJMenRZai9yVWlTNTRsR3QxcDR0M2RXM28xL3lrUFFTRHpHWS8yCjdEZmMvbmJIdzhUSklRNnF3YWdheUQvTUorUi9LL0VwSzFqWURKMzF2OTdPZkNSUEQ4L25qcm9NVkxtQzE5VnIKeXl5VEFFZ0s5eVYybnlNVVZuQlpKc2VlcDA1Mm9pWUJ3cUt5enptQVhMSzY3TFdNQjlIWXRqL09EWFU0eFIzLwo5SmVCaFU3REZnOFRaVm9OblZaMUUxVWZmZGk3QWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJUNHpPM0tSdE1XbVd0TDk3VUNJaTE3Q3FUVXlUQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ2prWUpTbUdXNQpPRGtWMXF6b0dhQnV6dEFWbndKdEVxWDl2VUJhTkNkNHFKamZGVkV4OG9ObzlFR0RLbXVsZUxNSklsdXE5TzN1CllaUnZXWGgxc0VnZGNYbVAwWkpwMjdoZXlabTc2SGxoenhpZU1RdTkzNWdrQkJiNEphamVubnI5OVVZdTZIWEoKS2ZoOE1vS2wvSi9zblQ1RGR3YW9SSklmLzVnekpLTGdodzNvQmVYQ21TcGlLYklMOGd2VkZUZTgzNm0vWklzcQpXaHd1M05RK2VGbTMvOVBkRzByS3N2MkVBQ1hYdStyZUYxYm1TT3JKQXhCckVORU5UMVd2TXpYM0QyWDZhcUJPCkt4OVZ2cFZyWllpVGZ1eHRwOWNUN0ZoSmdPUkxjaXBxYzlKTHBHbzVqVnNsbDcwaElPZ3lSU3M1WEJnVDFVTmsKbjk0WG1oeVlLd2tKCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    server: https://192.168.0.175:6443
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: dev-tom
+  name: dev-tom@kubernetes
+current-context: dev-tom@kubernetes
+kind: Config
+preferences: {}
+users:
+- name: dev-tom
+  user:
+    client-certificate-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUM5RENDQWR5Z0F3SUJBZ0lSQVBjQmZ0a0laNDE2b1J3NytSOTNHR1l3RFFZSktvWklodmNOQVFFTEJRQXcKRlRFVE1CRUdBMVVFQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBME1ESXlNRFF5TVRKYUZ3MHlOVEEzTVRFeQpNRFF5TVRKYU1BNHhEREFLQmdOVkJBTVRBM1J2YlRDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDCkFRb0NnZ0VCQU8zbmVlbkVObGtPN3hiY1hVdjV4RzJEeDQyVDFPLzhXRVZKT2tHcWl6VmM2clZEUGtCQnN5NTAKUDd2Y1dSWnpVMFVIUXpnSmVacFlzdFlqYzZGNGV3aUsydjFGUjNIUncrZ1N0MGtTUGN0SEFFeEJpWDJBcHZwRwpFR2VwUDVJU0VwNmZBcVR6ZWpxb2NvWjRESmNNaUtlK2xIaUNteUNYVUVMZldwbmh5SFdiTzNMUHUybjNIVGZKCmZNRDJETy9VOEt3NTVvOGxUb1ZuSWF2TWhlYlJ1MlBOMkgvRURSbk9nSmwrSUJYVysyMFBRLzdkS0Y2cVR6d1YKZHF3ZmtyTjR0OFNMSUxzK05vWmZKbmVTanR3RlNDYmZlcmUwVWxzemF4ZktwazVIZWJySSttS0VGalhkVEV1bQphOXVOY1pVcEVvem9WYTNuNEZ1T0FnNGhDZTNoWU9NQ0F3RUFBYU5HTUVRd0V3WURWUjBsQkF3d0NnWUlLd1lCCkJRVUhBd0l3REFZRFZSMFRBUUgvQkFJd0FEQWZCZ05WSFNNRUdEQVdnQlQ0ek8zS1J0TVdtV3RMOTdVQ0lpMTcKQ3FUVXlUQU5CZ2txaGtpRzl3MEJBUXNGQUFPQ0FRRUFwWjRUN1lwbDJ1ckxtTHBEVkVTKzRBTDc5RWZtYmgxcApKdXNIMW9uTjBJU0VGaUVNbE5tazg2RTNoUGRxTnZEeUpVRmRVT1ZuUVhUbDVvQitaRGtCVnlBdyt6by9MN2ZVCnJEK0ZENGVid0xuWHovYWlTN09HdEVpUUUwQk5pelBHdjlhOWdzM3pnZndGRmJyV0dGUkxjYXpOejZmMFhjSk0KTmF0WXhSMFJsdlZVcWhpdFB3RzRoaFdIU3lTVXdSdi9MMURuWjlEbVMwcDJOY0ZaU291ZFVEYy9lZEN6UVZpRApRTGFXNnhVbGR2aVA4dUxSc2wxNXdnd3F6SW0xV2QzTHRrYklpVXB0bWhJemhRQU5NdEI3cEwwNFNQbFZjZ05pCnp4VGVRVktJbDZVYVMvdFBsUHdMUnBvRGZuTS9yeDhhVFB5OUduNzJIQ3BkS2NHd1lvdjhWUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    client-key-data: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBN2VkNTZjUTJXUTd2RnR4ZFMvbkViWVBIalpQVTcveFlSVWs2UWFxTE5WenF0VU0rClFFR3pMblEvdTl4WkZuTlRSUWRET0FsNW1saXkxaU56b1hoN0NJcmEvVVZIY2RIRDZCSzNTUkk5eTBjQVRFR0oKZllDbStrWVFaNmsva2hJU25wOENwUE42T3FoeWhuZ01sd3lJcDc2VWVJS2JJSmRRUXQ5YW1lSElkWnM3Y3MrNwphZmNkTjhsOHdQWU03OVR3ckRubWp5Vk9oV2NocTh5RjV0RzdZODNZZjhRTkdjNkFtWDRnRmRiN2JROUQvdDBvClhxcFBQQlYyckIrU3MzaTN4SXNndXo0MmhsOG1kNUtPM0FWSUp0OTZ0N1JTV3pOckY4cW1Ua2Q1dXNqNllvUVcKTmQxTVM2WnIyNDF4bFNrU2pPaFZyZWZnVzQ0Q0RpRUo3ZUZnNHdJREFRQUJBb0lCQURiSzEwTkYwNWFUWC9HTgo4MWJxUVpsUGZvaFhBZlg3MG9DeXF0NHczenI5R1htQjhUWnZhMHRKcnR3ZmxjMGI1cFBCWm5QamlzUkhwWGk0ClZZdGM2a2svWWN4dlJsTXFrc3BDZFVBNUdVNVdIZlZ5S3E1akVSSVhUUFB6QVJjdFhtaDJDdS9ldThvQ3ZjM0cKbkcrMWpVdkZFd0RtWThBUDJZWnRWcnFXUzhyNThmdHpvdWRuVlozU3piZ3l0OW1VS0EvT2ZnRmRjanU0VjdxNAp0WHp4aHhRNDNiZVBwd2crb0IzcXZZMUtpbC9hU0crdHozK094b2RqV2JRODhLTy9VVGRzVGFjV1hRSFk5TkU1Cnp3cDZRa29yMjUvNnppYW5ZdHJlQndPQWRJSkJHK0JjV09ldGRQTXNxUWVZek1nNUMwTk11VVJRUFdLOG45YTQKVFM5cUpURUNnWUVBOThtU2RvcE5YSWM2VnBaYmNpdXhkT0d5V1kyN1BpdjR2UlpYaEFkOENhSlZ2UE4yaWo1Lwo3Zy8zSktlSUw4ZTBCQnlmRkV2QXlMVGFKZERQUWlFTGRzVmlFUHJmV015SjdyOGlCVkVPdXZsTllMQkpJOU80ClZUbnBPWWlqYjJxdG93R1pIWnZjTmo4aWdCVzBhZWdYcndSQ04yaDZjUnZ1Z0FtY0ZGNWtSejhDZ1lFQTljb00KRS9FNjRlRGpucG9nd3FibUY5UEh6TWRyU3JVS20zdkZpQnBPUSt5dlprU3NQZVhDcEtSR3RoaW9BMFR4UnJQVgpyeXVhRk9RVEswZUxRUTc4QzBEdzN0a1pPYVhKVE5tYWZpUDkxTmhrcHJ3czFVcjVXTW5BSnBCazZkOWxBOWM2CnpKSnZDKzRHOUJROTFnaGFCWm55M3c4cG9jN05iVVR1dWN3RHdWMENnWUJFYytwRFZ6ZkIvUld2di8vcFRZckwKcUdJMS9VS2lEVkc5SXdQd1ZJVCt3RnNCUlIwVldlakxvcHQ3QTlGS3FkZmdYdXZQbHBIZW9KKzNYTFUxSnAzZApKUEJQa283TElFNW1wMlRGcFR2MWlWUElCMHRkVzJzTUdHQ0c1V21KS1NabzV0TWU2K1R0RTRuN2FvT1owbVZnCmswT2J2UUErYVNIOU95cGtNaU52endLQmdDZ2o4aXNEbDNreU1CcEQwNXZXZy9kYU4rUWlvVXdYR3Y5ZmpGZjQKNjlVOS96czFkZWU1OFRyUU5WZ2gyTGFIK050eUhUQzVieldBTmYwNGR1Nk9FdTJIa283aVo3TTVkeEdjN0JVegpyWTJvTlcvaGhYVGtCS3JTY0JZY09NN1ZFL3MzbUR1Mm9ub1JTb05zRnRrd2pmc2lORDduakFZSDd4YXNUa3g3Cm5CVmxBb0dCQU1rQk53ZDN6VkNGd2tKb05HenR4dnJXUHdsWk1Id3dvUTl3dnJZWFZRT2E4NEtCZEZBY3dYMXcKMUgyMmJWYkMvYUNiUTJITXpyNDlGeXRkK25iMndDNFI2ZTRxTXhkdG5wZmxTcUkyYjVaT3pYeW1LWW5YVHg0YgpHRm45WWdBdHJOa0pSUEVvNUdKeDlrN0o3TE8xSzV1ZmhxejZuUlZJRnpabmNLdWJQUnA3Ci0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+
+
+Now we can give only 1 file: dev-tom.conf to user Tom and he can paste these file in his laptop as .kube/conf and access the cluster with given permission
+
+
+
+=======================================
+Give User Permission
+
+ClusterRole & ClusterRoleBinding
+=======================================
+
+# k create clusterrole dev-cr --verb=get,list,create,update --resource=deployment.apps,pods --dry-run=client -o yaml > dev-cr.yaml
+
+# vi dev-cr.yaml
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: dev-cr
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  verbs: [ "*" ]
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - statefulsets
+  - replicasets
+  - daemonsets
+  verbs:
+  - get
+  - list
+  - create
+---
+
+k --kubeconfig config apply -f dev-cr.yaml
+k --kubeconfig config get clusterrole
+
+NAME                                                                   CREATED AT
+admin                                                                  2025-03-28T00:38:34Z
+calico-cni-plugin                                                      2025-03-28T00:55:41Z
+calico-crds                                                            2025-03-28T00:50:05Z
+calico-extension-apiserver-auth-access                                 2025-03-28T00:50:05Z
+calico-node                                                            2025-03-28T00:55:41Z
+calico-tier-getter                                                     2025-03-28T00:50:05Z
+calico-tiered-policy-passthrough                                       2025-03-28T00:50:05Z
+calico-typha                                                           2025-03-28T00:56:54Z
+calico-webhook-reader                                                  2025-03-28T00:50:05Z
+cluster-admin                                                          2025-03-28T00:38:34Z
+dev-cr                                                                 2025-04-02T22:34:15Z
+
+# k --kubeconfig config describe clusterrole dev-cr
+Name:         dev-cr
+Labels:       <none>
+Annotations:  <none>
+PolicyRule:
+  Resources          Non-Resource URLs  Resource Names  Verbs
+  ---------          -----------------  --------------  -----
+  pods               []                 []              [*]
+  services           []                 []              [*]
+  daemonsets.apps    []                 []              [get list create]
+  deployments.apps   []                 []              [get list create]
+  replicasets.apps   []                 []              [get list create]
+  statefulsets.apps  []                 []              [get list create]
+
+# k create clusterrolebinding dev-crb --clusterrole=dev-cr --user=tom --dry-run=client -o yaml > dev-crb.yaml
+
+# k apply --kubeconfig config -f dev-crb.yaml
+
+# k describe --kubeconfig config clusterrolebindings.rbac.authorization.k8s.io dev-crb
+Name:         dev-crb
+Labels:       <none>
+Annotations:  <none>
+Role:
+  Kind:  ClusterRole
+  Name:  dev-cr
+Subjects:
+  Kind  Name  Namespace
+  ----  ----  ---------
+  User  tom
+
+# k get pods [success as user tom]
+
+# k auth --kubeconfig config can-i create pod --as tom
+yes
+#k auth --kubeconfig config can-i create pod --as tom
+yes
+#k auth --kubeconfig config can-i create service --as tom
+yes
+#k auth --kubeconfig config can-i get node --as tom
+Warning: resource 'nodes' is not namespace scoped
+
+no
+#k auth --kubeconfig config can-i delete deployment --as tom
+no

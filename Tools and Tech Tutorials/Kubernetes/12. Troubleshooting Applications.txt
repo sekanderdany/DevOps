@@ -1,0 +1,49 @@
+Debug with Temporary pod
+=========================
+
+# k run debug-pod --image=busybox
+
+# k exec -it debug-pod -- sh
+error: Internal error occurred: unable to upgrade connection: container not found ("debug-pod")
+
+# k run debug-pod-2 --image=busybox -it
+
+# k exec debug-pod-2 -it -- sh
+
+    # nslookup nginx-service
+    # ping nginx-service
+
+CMD = provide defaults for and executing container
+ENTRYPOINT = Preffred for executable that should always run
+             Allow users to append other commands
+
+command: ["sh"]
+args: ["-c", "while true; do echo hello; sleep 5; done"]
+
+command: ["sh"]
+args: ["-c", "sleep 1000"]
+
+command: ["sh", "-c", "sleep 1000"]
+
+command: ["printenv"]
+args: ["HOSTNAME", "KUBERNETES_PORT"] 
+
+# vi busybox-pod.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox-pod
+spec:
+  containers:
+  - image: busybox
+    name: busybox-pod
+    command: ["sh", "-c", "sleep 1000"]
+
+# k apply -f busybox-pod.yaml
+# k get po
+NAME                                READY   STATUS              RESTARTS   AGE
+busybox-pod                         0/1     ContainerCreating   0          2s
+
+# k exec -it busybox-pod -- sh -c "while true; do echo hello; sleep 2; done"
+# k exec -it busybox-pod -- sh -c "netstat -lntp"

@@ -1,0 +1,13 @@
+persons:
+  - name: maaike
+    age: 30
+    address:
+      streetname: YAML streetname
+      number: 1
+      zipcode: 123456
+      city: Programming City
+      country: The Netherlands
+    number: !!str 0612345678
+  - name: elias
+    age: 34
+    address: { streetname: YAML streetname, number: 1 }

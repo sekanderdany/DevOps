@@ -1,0 +1,9 @@
+config:
+  path: "config/.../env.config"
+  options:
+    - debug: true
+    - secure_mode: false
+    - code: !!str 01234
+  env: test
+  choices:
+    - "- nothing -"

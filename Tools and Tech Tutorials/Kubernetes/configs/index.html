@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Flying Game - Avoid Buildings!</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Arial', sans-serif;
+            color: white;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .overlay {
+            position: absolute;
+            padding: 10px 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 5px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #fff;
+            pointer-events: none;
+        }
+
+        #instructions {
+            top: 10px;
+            left: 10px;
+            font-size: 12px;
+        }
+
+        #score {
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        #gameOver {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff0000;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px 40px;
+            display: none;
+            text-align: center;
+            z-index: 1;
+        }
+
+        #startBtn,
+        #restartBtn {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        #restartBtn {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="instructions" class="overlay">
+        <b>Controls:</b><br>
+        W/S: Move Forward/Backward<br>
+        A/D: Yaw Left/Right<br>
+        Q/E: Roll Left/Right<br>
+        R/F (or Space/Shift): Ascend/Descend<br>
+        Arrows Up/Down: Pitch Up/Down<br>
+        Arrows Left/Right: Yaw Left/Right
+    </div>
+
+    <div id="score" class="overlay">
+        Score: 0
+    </div>
+
+    <div id="gameOver" class="overlay">
+        Game Over!
+    </div>
+
+    <button id="startBtn">Start Game</button>
+    <button id="restartBtn">Restart</button>
+
+    <script async src="https://unpkg.com/es-module-shims@1.8.3/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.163.0/build/three.module.js"
+      }
+    }
+  </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+
+        let scene, camera, renderer, airplane, clock;
+        let cameraOffset, scoreElement, gameOverElement, startBtn, restartBtn;
+        let moveState, moveSpeed, turnSpeed, collectibles = [], buildings = [], isGameOver = false, score = 0;
+
+        function setupScene() {
+            collectibles = [];
+            buildings = [];
+            score = 0;
+            isGameOver = false;
+
+            scoreElement.innerText = 'Score: 0';
+            gameOverElement.style.display = 'none';
+            restartBtn.style.display = 'none';
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+            scene.fog = new THREE.Fog(0x87CEEB, 150, 700);
+
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.physicallyCorrectLights = true;
+            document.body.appendChild(renderer.domElement);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+            directionalLight.position.set(50, 100, 75);
+            scene.add(ambientLight);
+            scene.add(directionalLight);
+
+            const airplaneSize = { x: 15, y: 3, z: 20 };
+            airplane = new THREE.Group();
+
+            const body = new THREE.Mesh(
+                new THREE.BoxGeometry(airplaneSize.x, airplaneSize.y, 3),
+                new THREE.MeshStandardMaterial({ color: 0xff0000, metalness: 0.5, roughness: 0.6 })
+            );
+            airplane.add(body);
+
+            const wing = new THREE.BoxGeometry(5, 0.5, airplaneSize.z);
+            const wingMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff, metalness: 0.4, roughness: 0.7 });
+            const leftWing = new THREE.Mesh(wing, wingMaterial);
+            leftWing.position.set(0, 0, -airplaneSize.z / 2 + 1.5);
+            airplane.add(leftWing);
+            const rightWing = new THREE.Mesh(wing, wingMaterial);
+            rightWing.position.set(0, 0, airplaneSize.z / 2 - 1.5);
+            airplane.add(rightWing);
+
+            const tail = new THREE.Mesh(
+                new THREE.BoxGeometry(2, 3, 0.5),
+                wingMaterial
+            );
+            tail.position.set(-airplaneSize.x / 2 - 0.5, 1.5, 0);
+            airplane.add(tail);
+
+            airplane.position.set(0, 50, 150);
+            scene.add(airplane);
+
+            cameraOffset = new THREE.Vector3(0, 5, -25);
+            camera.position.copy(airplane.position).add(cameraOffset);
+            camera.lookAt(airplane.position);
+
+            const cityWidth = 600;
+            const cityDepth = 600;
+            for (let i = 0; i < 150; i++) {
+                const b = new THREE.Mesh(
+                    new THREE.BoxGeometry(1, 1, 1),
+                    new THREE.MeshStandardMaterial({ color: 0xaaaaaa, metalness: 0.2, roughness: 0.8 })
+                );
+                const w = Math.random() * 20 + 10;
+                const h = Math.random() * 200 + 50;
+                const d = Math.random() * 20 + 10;
+                const x = (Math.random() - 0.5) * cityWidth;
+                const z = (Math.random() - 0.5) * cityDepth;
+                b.scale.set(w, h, d);
+                b.position.set(x, h / 2, z);
+                scene.add(b);
+                buildings.push(b);
+            }
+
+            const ground = new THREE.Mesh(
+                new THREE.PlaneGeometry(cityWidth * 1.5, cityDepth * 1.5),
+                new THREE.MeshStandardMaterial({ color: 0x555555, side: THREE.DoubleSide })
+            );
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.1;
+            scene.add(ground);
+
+            for (let i = 0; i < 30; i++) {
+                const ring = new THREE.Mesh(
+                    new THREE.TorusGeometry(5, 1, 8, 25),
+                    new THREE.MeshBasicMaterial({ color: 0xffff00 })
+                );
+                const x = (Math.random() - 0.5) * cityWidth * 0.8;
+                const y = Math.random() * 150 + 100;
+                const z = (Math.random() - 0.5) * cityDepth * 0.8;
+                ring.position.set(x, y, z);
+                scene.add(ring);
+                collectibles.push(ring);
+            }
+
+            moveState = { forward: 0, right: 0, up: 0, pitch: 0, yaw: 0, roll: 0 };
+            moveSpeed = 80.0;
+            turnSpeed = 1.2;
+            clock = new THREE.Clock();
+
+            window.addEventListener('resize', () => {
+                if (isGameOver) return;
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        function animate() {
+            if (isGameOver) return;
+            requestAnimationFrame(animate);
+            const delta = clock.getDelta();
+            if (!delta) return;
+
+            airplane.translateZ(moveState.forward * moveSpeed * delta);
+            airplane.translateY(-moveState.up * moveSpeed * delta);
+            airplane.rotateY(moveState.yaw * turnSpeed * delta);
+            airplane.rotateX(moveState.pitch * turnSpeed * delta);
+            airplane.rotateZ(moveState.roll * turnSpeed * delta);
+
+            const targetCam = airplane.position.clone().add(cameraOffset.clone().applyQuaternion(airplane.quaternion));
+            camera.position.lerp(targetCam, 0.1);
+            camera.lookAt(airplane.position.clone().add(new THREE.Vector3(0, 2, 10).applyQuaternion(airplane.quaternion)));
+
+            for (let i = collectibles.length - 1; i >= 0; i--) {
+                if (airplane.position.distanceTo(collectibles[i].position) < 10) {
+                    score++;
+                    scoreElement.innerText = `Score: ${score}`;
+                    scene.remove(collectibles[i]);
+                    collectibles.splice(i, 1);
+                }
+            }
+
+            for (const b of buildings) {
+                const pos = b.position, s = b.scale;
+                if (
+                    airplane.position.x > pos.x - s.x / 2 && airplane.position.x < pos.x + s.x / 2 &&
+                    airplane.position.y > 0 && airplane.position.y < pos.y + s.y / 2 &&
+                    airplane.position.z > pos.z - s.z / 2 && airplane.position.z < pos.z + s.z / 2
+                ) {
+                    isGameOver = true;
+                    gameOverElement.style.display = 'block';
+                    restartBtn.style.display = 'block';
+                    break;
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (isGameOver) return;
+            switch (e.code) {
+                case 'KeyW': moveState.forward = 1; break;
+                case 'KeyS': moveState.forward = -1; break;
+                case 'KeyA': case 'ArrowLeft': moveState.yaw = 1; break;
+                case 'KeyD': case 'ArrowRight': moveState.yaw = -1; break;
+                case 'KeyQ': moveState.roll = 1; break;
+                case 'KeyE': moveState.roll = -1; break;
+                case 'Space': case 'KeyR': moveState.up = 1; break;
+                case 'ShiftLeft': case 'KeyF': moveState.up = -1; break;
+                case 'ArrowUp': moveState.pitch = 1; break;
+                case 'ArrowDown': moveState.pitch = -1; break;
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            switch (e.code) {
+                case 'KeyW': case 'KeyS': moveState.forward = 0; break;
+                case 'KeyA': case 'KeyD': case 'ArrowLeft': case 'ArrowRight': moveState.yaw = 0; break;
+                case 'KeyQ': case 'KeyE': moveState.roll = 0; break;
+                case 'Space': case 'KeyR': case 'ShiftLeft': case 'KeyF': moveState.up = 0; break;
+                case 'ArrowUp': case 'ArrowDown': moveState.pitch = 0; break;
+            }
+        });
+
+        scoreElement = document.getElementById('score');
+        gameOverElement = document.getElementById('gameOver');
+        startBtn = document.getElementById('startBtn');
+        restartBtn = document.getElementById('restartBtn');
+
+        startBtn.addEventListener('click', () => {
+            startBtn.style.display = 'none';
+            setupScene();
+            animate();
+        });
+
+        restartBtn.addEventListener('click', () => {
+            location.reload();
+        });
+    </script>
+</body>
+
+</html>

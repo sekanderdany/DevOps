@@ -1,0 +1,67 @@
+sudo kubectl drain worker01 --ignore-daemonsets --delete-emptydir-data
+sudo kubectl drain worker02 --ignore-daemonsets --delete-emptydir-data
+sudo kubectl uncordon worker01
+sudo kubectl uncordon worker02
+
+# unset KUBECONFIG
+# mkdir -p /~/.kube
+# cp -i /etc/kubernetes/admin.conf /~/.kube/config
+
+Step 1: 
+Master
+------------------
+# scp /etc/kubernetes/admin.conf dany@192.168.0.177:/home/dany/admin.conf
+
+worker
+-----------------
+# mkdir -p $HOME/.kube
+# cp /home/dany/admin.conf $HOME/.kube/config
+# chown $(id -u):$(id -g) $HOME/.kube/config
+
+Step 2:
+
+Master
+------------------
+# sudo scp /etc/kubernetes/kubelet.conf dany@192.168.0.177:/home/dany/kubelet.conf
+# scp -r /var/lib/kubelet/pki dany@192.168.0.177:/home/dany/
+
+worker
+-----------------
+
+# cp /home/dany/kubelet.conf /etc/kubernetes/kubelet.conf
+# scp -r /home/dany/pki/ /var/lib/kubelet/
+
+# systemctl daemon-reexec
+# systemctl restart kubelet
+-------------------
+
+# kubectl get nodes
+# k get pods
+# scp /etc/kubernetes/admin.conf dany@192.168.0.176:/home/dany/admin.conf
+# scp /etc/kubernetes/admin.conf dany@192.168.0.177:/home/dany/admin.conf
+# k get pods
+# sudo systemctl status kube-apiserver
+# systemctl status containerd
+# systemctl status kube-apiserver
+# ls -la /etc/kubernetes/manifests/
+# curl -k https://localhost:6443/healthz
+# crictl ps -a | grep kube
+# KUBECONFIG=/etc/kubernetes/admin.conf kubectl get nodes
+# KUBECONFIG=/etc/kubernetes/admin.conf kubectl get pods --all-namespaces
+# KUBECONFIG=/etc/kubernetes/admin.conf 
+$ kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+# KUBECONFIG=/etc/kubernetes/admin.conf kubectl get pods --all-namespaces
+# watch -n 1 'KUBECONFIG=/etc/kubernetes/admin.conf kubectl get pods --all-namespaces'
+# KUBECONFIG=/etc/kubernetes/admin.conf kubectl get pods --all-namespaces
+# KUBECONFIG=/etc/kubernetes/admin.conf kubectl get pods -n kube-system
+# mkdir -p /home/dany/.kube
+# cp -i /etc/kubernetes/admin.conf /home/dany/.kube/config
+# kubectl get pods
+# mkdir -p /home/dany/.kube
+# cp -i /etc/kubernetes/admin.conf /home/dany/.kube/config
+# kubectl get pods
+# chown -R dany:dany /home/dany/.kube
+# cat /home/dany/.kube/config
+# env | grep KUBE
+# unset KUBECONFIG
+# kubectl get nodes

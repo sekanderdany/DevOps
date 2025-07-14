@@ -1,0 +1,10 @@
+person:
+  name: Maaike
+  age: 30
+  address:
+    streetname: Langstraat
+    number: 1
+    zipcode: 1234AB
+    city: Amsterdam
+    country: The Netherlands
+  dog: { name: Bobby, breed: labradoodle }

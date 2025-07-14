@@ -1,0 +1,26 @@
+apiVersion: apps/v1            #key Value Pairs
+kind: Deployment               #key Value Pairs
+metadata:                      #key Value Pairs (Mapping of mappings)
+  name: nginx-deployment       #key Value Pairs (Mapping of mappings, because it can have multiple labels)
+  labels:
+    app: nginx
+spec:                          #key Value Pairs
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx         # List here is a group of mappings
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+
+
+# sequence = list
+# mapping = dictionary
+# scalar = values (strings and numbers)

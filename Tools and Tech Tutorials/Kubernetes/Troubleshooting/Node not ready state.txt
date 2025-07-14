@@ -1,0 +1,135 @@
+Troubleshooting Kubernetes Worker Node in "Not Ready" State
+This is a common issue when setting up a Kubernetes cluster. Let's fix your worker node that's showing as "Not Ready".
+
+Quick Diagnostic Steps
+
+# Check node status with more details
+kubectl describe node worker01
+
+# Check all pods in kube-system namespace
+kubectl get pods -n kube-system
+
+# Check kubelet status
+systemctl status kubelet
+
+Common Causes and Fixes
+1. CNI (Container Network Interface) not installed:
+
+# On the master node, install Calico networking
+kubectl apply -f https://docs.projectcalico.org/v3.25/manifests/calico.yaml
+
+2. Kubelet service issues:
+
+# On the worker node
+sudo systemctl restart kubelet
+sudo systemctl status kubelet
+sudo journalctl -u kubelet -n 100 --no-pager
+
+3. Containerd issues:
+# On the worker node
+sudo systemctl restart containerd
+sudo systemctl status containerd
+
+4. Taints/Cordoning:
+
+# Check if the node is cordoned
+kubectl get nodes
+
+# If it shows SchedulingDisabled, uncordon it
+kubectl uncordon worker01
+
+# Check if there are unexpected taints
+kubectl describe node worker01 | grep -A5 Taints
+
+5. Certificate issues:
+
+# On the worker node, reset the installation
+sudo kubeadm reset
+
+# On the master, get a new join command
+sudo kubeadm token create --print-join-command
+
+# Then join again with the new token
+
+
+----------
+Step-by-Step Fix
+1. Check Kubelet Logs for Specific Error Messages
+
+sudo journalctl -u kubelet -n 100 --no-pager
+
+2. Fix Common Kubelet Issues
+Let's try the following steps on your worker01 node:
+
+# Reset the kubelet service state
+sudo systemctl stop kubelet
+
+# Check kubelet configuration
+sudo cat /etc/kubernetes/kubelet.conf
+
+# Check directory permissions
+sudo ls -la /var/lib/kubelet/
+sudo mkdir -p /var/lib/kubelet
+
+# Verify that containerd is running properly
+sudo systemctl status containerd
+sudo systemctl restart containerd
+
+# Clean up potential stale data
+sudo rm -rf /var/lib/kubelet/pki
+sudo rm -rf /etc/kubernetes/pki/kubelet
+
+# Restart kubelet
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+sudo systemctl status kubelet
+
+3. Check Node Communication with API Server
+
+# On worker01, try to reach the API server
+MASTER_IP="192.168.0.175"  # Replace with your master node IP
+curl -k https://${MASTER_IP}:6443/healthz
+
+4. Reset and Rejoin the Cluster if Necessary
+If the above steps don't work, you might need to reset and rejoin:
+
+# On worker01
+sudo kubeadm reset -f
+
+# Clean up network interfaces (important!)
+sudo ip link delete cni0
+sudo ip link delete flannel.1
+sudo ip link delete calico.1
+sudo ip link delete tunl0
+sudo ip link delete vxlan.calico
+
+# On master01, get a new join token
+sudo kubeadm token create --print-join-command
+
+# On worker01, use that join command to rejoin
+sudo kubeadm join ... # Use the command from master
+
+
+5. Check Firewall Rules
+Make sure the necessary ports are open:
+
+10250/TCP (kubelet)
+30000-32767/TCP (NodePort services)
+
+# Check if iptables is blocking anything
+sudo iptables -L | grep DROP
+
+Additional Troubleshooting
+1. Verify DNS resolution between nodes:
+
+ping master01
+nslookup master01
+
+2. Check for clock synchronization issues:
+
+timedatectl status
+
+3. Examine network plugin logs:
+
+kubectl logs -n kube-system calico-node-vkcdv
+

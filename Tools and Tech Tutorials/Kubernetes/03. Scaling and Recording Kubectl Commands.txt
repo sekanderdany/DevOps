@@ -1,0 +1,30 @@
+Old Method
+===========
+# k rollout history deployment nginx-deployment
+deployment.apps/nginx-deployment
+REVISION  CHANGE-CAUSE
+1         <none>
+
+# k scale deployment nginx-deployment --replicas=3 --record=true
+Flag --record has been deprecated, --record will be removed in the future
+deployment.apps/nginx-deployment scaled
+
+# k rollout history deployment nginx-deployment
+deployment.apps/nginx-deployment
+REVISION  CHANGE-CAUSE
+1         kubectl scale deployment nginx-deployment --replicas=3 --record=true
+
+New Method
+===========
+# k scale deployment nginx-deployment --replicas=5
+deployment.apps/nginx-deployment scaled
+
+# kubectl annotate deployment nginx-deployment \
+>   kubernetes.io/change-cause="Scaled replicas to 5"
+
+deployment.apps/nginx-deployment annotated
+
+# kubectl rollout history deployment nginx-deployment
+deployment.apps/nginx-deployment
+REVISION  CHANGE-CAUSE
+1         Scaled replicas to 5

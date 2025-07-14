@@ -1,0 +1,12 @@
+k get pod -o jsonpath='{.items[0].metadata.name}'
+k get pod -o jsonpath='{.items[*].metadata.name}'
+k get pod -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}'
+k get pod -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.podIP}{"\n"}{en
+d}'
+k get pod -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.status.podIP}{"\t"}{.status.startTime}{"\n"}{end}'
+
+
+Custom Columns:
+----------------
+
+k get pod -o custom-columns=POD_NAME:.metadata.name,POD_IP:.status.podIP,CREATED_AT:.status.startTime

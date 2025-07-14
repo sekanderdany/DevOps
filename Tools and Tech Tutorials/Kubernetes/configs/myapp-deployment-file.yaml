@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: my-db
+  name: my-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-db
+  template:
+    metadata:
+      labels:
+        app: my-db
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: my-db
+        image: busybox:1.28
+        command: [ 'sh', '-c', "cat /mysql/db-config/mysql.conf; cat /mysql/db-secret/secret.file; sleep 20" ]
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+            ephemeral-storage: "1Gi"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+            ephemeral-storage: "2Gi"
+        volumeMounts:
+        - name: db-config
+          mountPath: /mysql/db-config
+        - name: db-secret
+          mountPath: /mysql/db-secret
+          readOnly: true
+      volumes:
+      - name: db-config
+        configMap:
+          name: mysql-config-file
+      - name: db-secret
+        secret:
+          secretName: mysql-secret-file

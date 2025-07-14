@@ -1,0 +1,10 @@
+Major Linux Features used by Docker:
+   - NAMESPACES
+   - CGROUPS
+   - VETH
+   - IPTABLES
+   - UNION MOUNT
+
+2010 and before: Physical Servers
+2012: One App One VM
+2013: Docker

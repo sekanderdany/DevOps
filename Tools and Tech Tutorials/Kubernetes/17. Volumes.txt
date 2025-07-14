@@ -1,0 +1,85 @@
+Vim my-pv.yaml
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: data-pv
+spec:
+  hostPath:
+    path: "/mnt/data"
+  capacity:
+    storage: 10Gi
+  accessModes:
+  - ReadWriteMany
+
+---
+
+k apply -f my-pv.yaml
+
+k get pv
+
+vi my-app-pvc.yaml
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: task-pv-claim
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+---
+
+k apply -f my-app-pvc.yaml
+
+k get pvc
+
+k get pv
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: mysql
+spec:
+    selector:
+        matchLabels:
+            app: mysql
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+            labels:
+                app: mysql
+        spec:
+            containers:
+            - image: mysql:5.7
+                name: mysql
+                env:
+                - name: MYSQL_ROOT_PASSWORD
+                    value: "password"  # In production, use a secret instead
+                ports:
+                - containerPort: 3306
+                    name: mysql
+                volumeMounts:
+                - name: mysql-persistent-storage
+                    mountPath: /var/lib/mysql
+            volumes:
+            - name: mysql-persistent-storage
+                persistentVolumeClaim:
+                    claimName: task-pv-claim
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: mysql
+spec:
+    ports:
+    - port: 3306
+    selector:
+        app: mysql
+---

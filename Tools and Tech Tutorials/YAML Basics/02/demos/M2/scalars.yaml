@@ -1,0 +1,15 @@
+name: maaike
+noquotes: whatever without quotes
+quotes: "whatever with quotes"
+single: 'whatever in single quotes'
+escape: "she said: \"escaping can only be done in double quoted scalars\""
+
+float: 1.2
+octal: 0121
+hexadecimal: 0xABC
+
+boolean: true
+nothing: null
+duplicateKeys: not allowed
+"123a lot of weird stuff": can be used as duplicateKeys
+moreWeirdStuff: '# This is not a''comment'''

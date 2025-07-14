@@ -1,0 +1,39 @@
+Troubleshoot Kubelet issue
+----------------------
+
+Node not Ready
+-------------------------
+
+service kubelet status
+
+journalctl -u kubelet
+
+which kubelet
+ls -l /usr/bin/kubelet
+
+service kubelet status
+cat /usr/lib/systemd/system/kubelet.service.d/10-kubeadm.conf
+
+set proper executable path to this file
+
+sudo systemctl daemon-reload
+sudo systemctl restart kubelet
+
+Troubleshoot Kubectl Connection issue
+-------------------------------------
+
+k get Node
+
+k cluster-info
+
+cat ~/.kube/config
+[copy certificate-authority-data]
+
+echo LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURCVENDQWUyZ0F3SUJBZ0lJU3RHZ2d2bkk4ZTh3RFFZSktvWklodmNOQVFFTEJRQXdGVEVUTUJFR0ExVUUKQXhNS2EzVmlaWEp1WlhSbGN6QWVGdzB5TlRBMU1UWXdPVFUxTkRaYUZ3MHpOVEExTVRReE1EQXdORFphTUJVeApFekFSQmdOVkJBTVRDbXQxWW1WeWJtVjBaWE13Z2dFaU1BMEdDU3FHU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLCkFvSUJBUUN2bmhYNkRYb1pZUTA2TnJydzdpYXdPZGQwaVRYanIyay9HNit5RS9MOWhHOUxrSkxLcGMyKzdTWW0KR2VOZnVvVWtlYWZ4THZ0V3NsTjZsT1d4SlpSYnhzT1FBSGE0d0Zrd3BmWWxZSzJsVS9lTU5xWk9GbGNXMys4MApKSVMxWGNYU0l2Sk5xUlRRWE5RVWs4Z0hWRDBUd01iaWZpWEwxNVNNTnZ6QXJhcGNpcE9hUEZlbms5cE5nTitnClZxclpDaXFzcGVmRnJqd3VtR3cxWEdncXNGMCtpNzRTejAxZ1BZZHBQcXZRbTRZV3lSOUZFcGtJbDIvL1I0WjcKUGI4TEhNWmtXNnh4SkNFcUZpcFF4UmVEcU4xSUdxOFY4b1M3R0hBVVpCTGFWYWZabGNNS0xrZ0x1M05ycGNoYwpDazI1Yk5BeE1GbmNzZDRKdGpNYmNaZnFmdVovQWdNQkFBR2pXVEJYTUE0R0ExVWREd0VCL3dRRUF3SUNwREFQCkJnTlZIUk1CQWY4RUJUQURBUUgvTUIwR0ExVWREZ1FXQkJSc2ttRWFMV2RCQjkwKzVIMjRDdkFiL1RKcEpUQVYKQmdOVkhSRUVEakFNZ2dwcmRXSmxjbTVsZEdWek1BMEdDU3FHU0liM0RRRUJDd1VBQTRJQkFRQ2RndXVLRC9qMwpvb0xjVXV0S29OeEtZR0k4OEZxK3UzdjV2WlV2TXhCRnhmSWtxKy9WMStJTlA4UTFBSTJ6NGVsWlFaa0szU0xNCjZuQkhEejZpb2QxTmgxVmpYckE3RkllNXk4YlJudldPQkF1Z3RFYlJlZTVSTUd0RHdJZmh5TWxjeFRVOVFrZCsKY1hOSFJVcmtObllCUC9scHhHNTg5QkphUE5lZys2V3ZCc0p2WThZQXY3UDJHcS9yRXVKeW11ejFKRjBzR1p0RAo0RjZUdTcxUXExVUdFK2hBdmtmSGRzdm53d3g5S3dBdDBoODF2clFoN1lLeDdrRnBLZW04RTN2K1JieDRIb0hhCjNnVVlvb2R4enhRUTVtNU83Ty9HeHQ2NUI1Wjhzdlpsb2l3cGwxUkQvSzh6MTRZU2txVkpPUExnR3hOSjNyeEsKWG5kUkJhSFhET2VUCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K | base64 --decode
+
+[match the value with]
+
+sudo cat /etc/kubernetes/pki/ca.crt
+
+kubectl config view
+[check server ip]

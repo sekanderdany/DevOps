@@ -1,0 +1,15 @@
+# show for folding: > and |
+# show for chomping: + - and nothing
+
+# multi-line: >- trailing new lines will be gone
+# multi-line: >+ trailing new lines will be added
+multi-line: |+
+  Some silly text across multiple lines,
+  very important to include some white space:
+
+  And some 
+    more indentation
+  And some trailing newlines.
+
+
+

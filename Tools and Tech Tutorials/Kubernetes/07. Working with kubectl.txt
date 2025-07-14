@@ -1,0 +1,5 @@
+# k create svc clusterip test-new-cidr --tcp=80:80 --dry-run=client > my-svc.yaml
+
+# k create deployment my-deployment --image=nginx:1.20 --replicas=3 --dry-run=client -o yaml > my-deployment.yaml
+
+# k run pod my-pod --image=nginx:1.20 --labels="app=nginx,env=prod" --dry-run=client -o yaml > my-pod.yaml

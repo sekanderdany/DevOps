@@ -1,0 +1,15 @@
+# person object
+person:
+  name: Maaike
+  age: 30
+  address:
+    streetname: Langstraat
+    number: 1
+    zipcode: 1234AB
+    city: Amsterdam
+    country: The Netherlands
+  hobbies:
+    - reading
+    - programming
+    - fitness
+    - jigsaw puzzles

@@ -1,0 +1,18 @@
+<!-- person object -->
+<person>
+    <name>Maaike</name>
+    <age>30</age>
+    <address>
+        <streetname>Langstraat</streetname>
+        <number>1</number>
+        <zipcode>1234AB</zipcode>
+        <city>Amsterdam</city>
+        <country>The Netherlands</country>
+    </address>
+    <hobbies>
+        <hobby>programming</hobby>
+        <hobby>studying</hobby>
+        <hobby>fitness</hobby>
+        <hobby>jigsaw puzzles</hobby>
+    </hobbies>
+</person>

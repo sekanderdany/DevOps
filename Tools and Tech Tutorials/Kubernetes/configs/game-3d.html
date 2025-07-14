@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Flying Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Scene, Camera, Renderer
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Lighting
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(10, 10, 10);
+        scene.add(light);
+
+        // Skyscrapers
+        const skyscraperGeometry = new THREE.BoxGeometry(1, 1, 1); // Base geometry
+        const skyscraperMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+        const skyscrapers = [];
+        for (let i = 0; i < 50; i++) {
+            const skyscraperHeight = Math.random() * 5 + 5;
+            const skyscraper = new THREE.Mesh(new THREE.BoxGeometry(1, skyscraperHeight, 1), skyscraperMaterial);
+            skyscraper.position.set(
+                Math.random() * 50 - 25,
+                skyscraper.geometry.parameters.height / 2,
+                Math.random() * 50 - 25
+            );
+            scene.add(skyscraper);
+            skyscrapers.push(skyscraper);
+        }
+
+        // Plane
+        const planeGeometry = new THREE.BoxGeometry(0.5, 0.2, 1);
+        const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+        const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+        plane.position.set(0, 2, 0);
+        scene.add(plane);
+
+        // Camera position
+        camera.position.set(0, 2, 5);
+
+        // Controls
+        const keys = {};
+        window.addEventListener('keydown', (e) => keys[e.key] = true);
+        window.addEventListener('keyup', (e) => keys[e.key] = false);
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Plane movement
+            if (keys['ArrowUp']) plane.position.z -= 0.1;
+            if (keys['ArrowDown']) plane.position.z += 0.1;
+            if (keys['ArrowLeft']) plane.position.x -= 0.1;
+            if (keys['ArrowRight']) plane.position.x += 0.1;
+
+            // Camera follows the plane
+            camera.position.set(plane.position.x, plane.position.y + 2, plane.position.z + 5);
+            camera.lookAt(plane.position);
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,22 @@
+config: &db
+  database_name: dbname
+  password: supersecretandnotsafe
+config_prod:
+  <<: *db
+  password: custompassword
+
+person: &person
+  name: Maaike
+  age: 30
+  address:
+    streetname: Langstraat
+    number: 1
+    city: Amsterdam
+    zipcode: 1234AB
+    country: The Netherlands
+
+another_person: *person
+
+yet_another_person:
+  <<: *person
+  name: maria

@@ -1,0 +1,1036 @@
+https://www.udemy.com/course/in-depth-hands-on-devops-accelerator-program/?couponCode=ST14MT101024#reviews
+
+History
+=================
+cat .bash_history = default file = [updated only when the user is logged out]
+
+echo $HISTSIZE		 [maximum commands in memory]
+echo $HISTFILESIZE 	 [number of commands in bash]
+echo $HISTCONTROL 	 [ignore commands and not save in history]
+HISTTIMEFORMAT="%d%m%y %T"
+echo HISTTIMEFORMAT="%d%m%y %T>> .bashrc [to record permamently]
+
+!70 = run 70th command in history
+!! = run previous command
+!-7 = last 7th command in history
+!ping = last ping command
+!ping:p = print it
+history -d 107 = deletes the line number
+history -c
+
+============ 
+List
+============
+
+ls -l = long listing
+ls -lh = human readable long listing
+ls -la = hidden file
+ls -lS = Sort the files by largest
+ls -lX = sorted by extension
+ls --hide=*.conf = hide content
+ls -lR = list the file in sub directory
+type ls
+stat /etc/passwd = stat of the file
+ls -lt = modification time
+ls -lu = access time
+ls -lc = change time
+ls -l --full-time = entire modification time
+ls -lu -r = reverse show
+touch -d "2010-10-31 15:45:30" linux.txt = modify access and modification time 
+
+file /home/user/image.jpeg
+tail /etc/passwd
+tail -n 2
+head -n 5
+tail -n +20 = from line 20 to last
+watch ls
+watch -n 3 -d  = n > update interval
+cp -p = copy with permission
+mv -n = move file if it doesnt exist in dst location
+mv -u = move only if source is modified later than dst
+wc = byte count
+wc -l = line count
+wc -w = word count
+wc -c = charecter count
+
+============ 
+Shortcuts
+============
+
+Ctrl + D = logout or exit
+Ctrl + L = clear screen
+Ctrl + A = beginning of the line
+Ctrl + E = end of the line
+Ctrl + U = deletes all characters before the cursor (works in password also)
+Ctrl + C = interrupts current process and also stops it
+Ctrl + P = previous command in command history
+Ctrl + N = next command in command history
+Ctrl + R = search in command history
+Ctrl + G = remove the history search and clear the line
+Ctrl + F (or space) = move down one window of output
+Ctrl + B = move backwords
+g = beginning of the file
+G = end of the file
+n = next occurrence of search
+N = previous occurrence of search
+
+===============
+Review
+===============
+Lesson 17 - linux directories
+
+which ls
+which fdisk
+proc = v directory
+cat /proc/cpuinfo
+cat /proc/meminfo
+
+===============
+Review
+===============
+
+Lesson 18 - Absolute vs. Relative Paths. Walking through the File System (pwd, cd, tree)
+=============================================
+tree -d = print directories
+tree -f = print absolute path
+
+tree -df /etc/
+
+Lesson 19 - The LS Command In Depth (ls)
+=============================================
+
+ls /etc/ /var/ .
+ls -l -X /etc = sort by extension
+ls --hide=*.conf /etc
+ls --color=auto
+
+Lesson 20: Understanding File Timestamps: atime, mtime, ctime (stat, touch, date) 
+========================================================
+
+ls -lu = atime = access time
+ls -lt = mtime = modified time
+ls -lc = ctime = change time
+
+stat /etc/passwd
+ls -l --full-time /etc/
+
+touch test.txt = if you want to update modified time to current time
+touch -a test.txt = change access time
+touch -m -t 201812301530 test.txt = change modification time
+touch -d "2019-12-29 15:31:20" test.txt = change modification time
+touch test.txt -r ubuntu.txt = change all time of test.txt from ubuntu.txt's time
+
+file abc.txt
+
+
+
+21. Sorting Files by Timestamp 
+22. File Types in Linux (ls -F, file) 
+23. Viewing Files - Part 1 (cat) 
+24. Viewing Files - Part 2 (less, more) 
+========================================================
+
+less /var/log/dmesg
+    g = End of the file
+    G = Beginning of the file
+    Ctrl + F = Forward one window
+    Ctrl + B = Backward one window
+    /RAM = search string 'RAM'
+        n = Next occurance
+        N = previous occurance
+
+25. Viewing Files - Part 3 (tail, head, watch)
+================================================
+
+tail /etc/passwd
+tail -n 2 /etc/passwd
+tail -n +20 /var/log/syslog = starting from the line 20 to the end
+head /etc/passwd
+head -n 2 /etc/passwd
+head -7 /var/log/syslog = first 7 line
+
+watch ls
+watch -n3 -d ls -l = watch and difference will be marked
+watch -n1 -d ifconfig
+
+26. Creating Files and Directories (touch, mkdir)
+======================================
+
+mkdir dir1
+mkdir -p dir1/dir2/dir3
+
+27. Copying Files and Directories (cp)
+========================================
+cp /etc/group ./users.txt =  = directly execute without showing anything
+cp -v /etc/group ./users.txt = verbose
+cp -i /etc/group ./users.txt = prompt for overwritting
+cp -r /etc/ ./ = copy directory with content
+
+28. Moving and Renaming Files and Directories (mv)
+29. Removing Files and Directories (rm, shred) 
+===================================================
+
+rm -i dir1/dir2/dir3 = remove with confirmation prompt
+rm -v dir1/abc.txt
+rm -r dir1
+
+
+30. Working With Pipes in Linux (|, wc) 
+===================================================
+
+STDIN (0) = Standard Input
+STDOUT (1) = Standard output
+STDERR (2) = Standard Error
+
+ls -lSh /etc/ | head
+ls -lSh /etc/ | head -n 20 | tail -n 1
+cat /var/log/auth.log | grep 'authentication failure'
+cat /var/log/auth.log | grep 'authentication failure' | wc -l
+wc -w  = word count
+
+31. Command Redirection (>, >>, 2> &>, cut, tee) 
+====================================================
+
+
+tty
+ifconfig > /dev/pts/2 = print output in terminal
+echo 'hello' > /dev/pts/2
+dasd 2> error.txt
+cat error.txt
+tail -n 3 /etc/shadow > output.txt  2> error.txt
+tail -n 3 /etc/shadow > output.txt  2>&1
+ifconfig | grep ether | cut -d" " -f10 > mac.txt
+cat /etc/passwd | cut -d ":" -f1
+ifconfig | grep ether | tee m.txt = show the output and write it in file. by default tee command overwrites the file
+ifconfig | grep ether | tee -a m.txt = append
+uname -r | tee -a m.txt kernel.txt = append in m.txt and write the output in kernel.txt
+
+32. Finding Files and Directories - Part 1 (locate, which)
+==============================================
+
+apt install plocate
+updatedb
+ls /var/lib/plocate/
+
+locate passwords
+locate eahorse
+locate -b eahorse
+locate -b *eahorse*
+locate -b '\name'
+locate -b '\etc'
+locate -b '\eahorse'
+locate -b '\etc'
+locate -b '\shadow'
+locate -b 'shadow' = all match
+locate -b '\shadow' = exact match
+touch myfile123
+touch -e myfile123 = existing
+locate myfile123
+updatedb
+locate myfile123
+locate Rainshadow
+locate -i Rainshadow
+
+33. Finding Files and Directories - Part 2 (find)
+==============================================
+
+mkdir projects/
+touch projects/report.txt
+touch projects/todo.txt
+tree projects/
+find . -name todo.txt
+find . -iname todO.txT
+find . -name todo
+find . -name todo*
+find . -name "todo*"
+find . -name "*rep*"
+find . -name "*report*"
+find . -name todo.txt
+find . -name todo.txt -delete = find and delete
+find . -name todo.txt
+find /etc/ -name passwd
+find /etc/ -name passwd -ls = add ls to the found contents
+find /etc/ -type d = find directories
+find /etc/ -type d -maxdepth 3 -perm 755 | wc -l = maxdepth shows number of subdirectories, perm is for permission
+find /var -type f -size 100k -ls
+find /var -type f -size 10M -ls
+find /var -type f -size -10k -ls = smaller than 10k
+find /var -type f -size +5M -size -10M -ls = betwn 5 to 10 MB
+find /var -type f -mtime 0 -ls = modified in the last 24 hours
+find /var -type f -mtime 1 -ls = modified betwn 1 and 2 days ago
+find /var/ -type f -atime +1 -ls = access 2 days ago
+find /var -type f -mmin -60 = modified in last hour
+find /var -type f -user jenkins -ls = find by user
+find /var -type f -not -user root -ls = find by user except mentioned
+find /var -type f -not -group root -ls = find by group except mentioned
+
+34. Find and Exec
+=============================================
+
+find /etc -type f -mtime 0 -exec cat {} \; = run cat command on all found files
+find /etc -type f -mtime 0 -exec cat {} \;
+find /etc -mtime -7 -type f -exec cp {} /root/backup/ \; = copy the files found to the backup directory
+sudo find /etc -mtime -7 -type f -ok cp {} /root/backup/ \; = ask before copying every file
+
+35. Searching for String Patterns in Text Files (grep)
+=================================================
+grep user /etc/ssh/ssh_config
+grep "command line" /etc/ssh/ssh_config
+grep "SSH" /etc/ssh/ssh_config
+grep -i "SSH" /etc/ssh/ssh_config
+grep -i -n "SSH" /etc/ssh/ssh_config = print out line number
+grep body /etc/passwd
+grep -w body /etc/passwd
+grep kernel /var/log/dmesg
+grep -v kernel /var/log/dmesg
+grep root /var/log/auth.log
+grep -a 'root' /var/log/dmesg 
+grep -R 127.0.0.1 /etc/ = run the commands on all files in /etc
+grep -s -R 127.0.0.1 /etc/ = surprass non existing or unreadable file
+grep -c err /var/log/syslog = count number of occurance
+dmesg | grep err
+dmesg | grep -A 3 -B 4 err = print 4 lines before err and 3 lines after it
+dmesg | grep -C 3 err
+netstat -tupan | grep 53
+ls -RF /etc/ | grep -v / 
+ls -RF /etc/ | grep -v / | grep -v "^$" = ^ is beginning of the line and $ is end of the line
+ls -RF /etc/ | grep -v / | grep -v "^$" | wc -l
+ls -RF /etc/ | grep -v / | grep -v "^$" | sort -r = sorted by name in reverse
+
+
+36. Searching for Strings in Binary Files (strings)
+====================================================
+
+which ls
+strings /usr/bin/ls = printable ascii charecters embaded in the file
+strings /usr/bin/ls | less
+df -h
+strings -a /dev/vda1
+ls -l /dev/mem
+strings /dev/mem = show printable ascii charecters in the memory
+
+
+37. Comparing Files (cmp, diff, sha256)
+====================================================
+ifconfig > a
+ping 8.8.8.8
+ifconfig > b
+cmp a b
+cp /usr/bin/ls .
+sha256sum /usr/bin/ls ./ls
+echo "a" > ls
+cmp /usr/bin/ls ./ls
+sha256sum /usr/bin/ls ./ls
+diff a b
+apt install ssh
+cp /etc/ssh/sshd_config .
+diff /etc/ssh/sshd_config ./sshd_config
+diff -B a b = ignore blank space
+diff -w a b = ignore white space
+diff -i a b = ignore case sensitive
+diff -y a b = compare side by side
+
+38. The Basics of VIM Text Editor
+39. The VIM Editor In Depth - Part 1 
+40. The VIM Editor In Depth - Part 2 
+========================================
+vim ssh_config
+
+VIM Modes:
+    - command
+        - x = delete
+        - r = replace
+        - i = insert
+        - I = insert in the beginning of the line
+        - a = append the text after the cursor
+        - A = append the text to the end of the current line
+        - o = write on a new line below the cursor
+        - O = write on a new line above the cursor
+        - ZZ = save the file and quit
+        - G = end of the file
+        - gg = beginning of the file
+        - n = go to the next search
+        - N = go to the previous search
+        - * = search the next word under the cursor
+        - # = search the previous word under the cursor
+        - u = undo the last operation only
+        - ctrl+r = redo the previous operation
+        - v = select charecters
+        - V = select lines
+        - ctrl + v = select block
+        - y = yank/copy
+        - dd = cut
+        - 20dd = cut next 20 line
+        - p = paste after the cursor
+        - P = paste before the cursor
+        - yy = copy
+        - 30yy = copy next 30 line
+        - : = last line mode
+
+    - insert
+    - last line mode
+        - :q! = quite without saving
+        - :w! = save
+        - :wq! = save and quit
+        - :!ls = run shell command inside vim
+        - :!ifconfig = run shell command inside vim
+        - /ssh = search the key word 'ssh' forward
+            - n = go to the next search
+            - N = go to the previous search
+        - ?ssh = search the key word 'ssh' backward
+            - n = go to the previous search
+            - N = go to the next search
+        - :%s/no/XXX/g = replace string no with XXX
+        - :e! = undo until you last saved the file
+            - u = undo the last operation only
+            - ctrl+r = redo the previous operation
+        - :set nu = show line Numbers
+        - :set nonu = hide line Numbers
+        - :syntax off = disable color
+        - :syntax on = enable color
+        - :100 = go to 100th line
+        - :n = go to next file if multiple files are open
+        - :N = go to previous file if multiple files are open
+To make the changes of last line commands permanent do this:
+    - vim ~/.vimrc
+        set nu
+        syntax off
+vim -o a b = split window and open both files
+    - Ctrl + w + w = go to other window windows
+vim -d sshd_config sshd_config2 = compare 2 files
+
+41. Compressing and Archiving Files and Directories (tar, gzip)
+===============================================================
+tar
+    - -c, --create
+    - -f, --file=ARCHIVE
+    - -j, --bzip2
+    - -t, --list
+    - -v = verbose
+    - -x, --extract, --get
+    - -z, --gzip, --gunzip, --ungzip
+    
+    
+
+tar -czvf backup.tar.gz backup/
+tar -czvf /tmp/backup.tar.gz backup/
+tar -cjvf backup.tar.bz2 backup/
+tar -czvf archive.tar.gz /etc/passwd /etc/group /var/log/dmesg /etc/ssh = zip multiple files
+tar --exclude='*.mkv' --exclude='.config' --exclude='*.cache' -czvf myfome.tar.gz ~ = exclude specifics
+tar -tf archive.tar.gz | grep sshd_config = search a gip file
+tar -cjvf etc-$(date +%F).tar.bz2 /etc/ = add date to the filename
+
+tar -xjvf backup.tar.bz2 -C my_backup/ = to unzif the tar file
+
+42. Hard Links and the Inode Structure
+===============================================================
+Inode structure:
+    - Each file on the disk has a data structure called index node or inode associated with it.
+    - This structure stores metadata information about the file such as the type, file's permission, file's owner and group owner, timestamp information, file size and so on.
+    - It actually contains all file information except the file contents and the name.
+    - Each inode is uniquely identified by an integer number called inode number (ls -i)
+    - Each . and .. in a directory is hard linked to the parent directory
+
+ls -li = first number is inode number or inum
+ln a.txt b.txt = hard link
+ln b.txt my_backup/c.txt
+find / -inum 253903 = find all the hard links
+ls -ld /etc/
+ls -lid /etc/ = find inum of directory
+ls -lia /etc/vim/ = .. is lined to etc with same inum
+find /usr/ -type f -links +1 = find all the files with more than 1 link
+find /usr/ -type f -links +1 -ls = find all the files with more than 1 link with list
+
+43. Working With Symlinks. Symlinks vs. Hard Links
+==================================================
+ln -s /etc/passwd ./pswd
+ls -l pswd
+ps aux > processes.txt
+ln processes.txt p.txt
+ln -s processes.txt symlink_p.txt
+ls -li
+mv processes.txt my_backup/
+ls -l
+
+
+44. Understanding /etc/passwd and /etc/shadow files
+===================================================
+cat /etc/passwd
+dnsmasq:x:999:65534:dnsmasq:/var/lib/misc:/usr/sbin/nologin
+    dnsmasq = login name
+    :x = password assigned [blank means no pass needed]
+    :999 = user id
+    :65534 = gorup id
+    :dnsmasq = comment
+    :/var/lib/misc = user's home directory
+    :/usr/sbin/nologin = default shell
+
+cat /etc/shadow
+dany:$y$j9T$kZ4XODwzhQ.Fg7PTjcY35.$BSkH1Ce87hJbU4Sdp7VogVr8DOrMsMZpdDh3C.Sw5A3:20025:0:99999:7:::
+    dany = login name
+    :$y$j9T$kZ4XODwzhQ.Fg7PTjcY35.$BSkH1Ce87hJbU4Sdp7VogVr8DOrMsMZpdDh3C.Sw5A3 = password
+    :20025 = password expiration date
+    :0
+    :99999
+    :7
+    :
+    :
+    :
+polkitd:!*:20005:::::: = !* meaning user not allowed to login using password auth. key based authentication and switching user is allowed
+
+45. Understanding Linux Groups (groups, id)
+==============================================
+grep root /etc/passwd
+groups = list of all groups the user belongs to
+groups root
+id 
+
+46. Creating User Accounts (useradd)
+====================================
+sudo useradd u1
+sudo passwd u1
+less /etc/default/useradd = see the default options
+groups u1
+cat /etc/login.defs = Configuration control definitions for the shadow package
+sudo useradd -m -d /home/james -c "C++ dev" -s /bin/bash -G sudo,adm,mail james = -m - create home directory
+             -d - add additional directory
+             -c - add comment
+             -s - add shell
+             -G - add secondary group
+sudo useradd -e 2020-12-31 u2
+sudo chage -l james
+sudo chage -l u2
+ 
+
+47. Changing and Removing User Accounts (usermod, userdel)
+==========================================================
+
+cat /etc/passwd
+cat /etc/shadow
+cat /etc/group
+cat /etc/gshadow
+cat /etc/login.defs
+
+sudo usermod -c 'Golang developer' james = change the comment
+cat /etc/passwd
+sudo usermod -g daemon james = change primary group
+sudo groups james
+sudo groupadd developers = add group
+sudo groupadd managers
+sudo usermod -G developers,managers james = replace current secondary groups
+groups james
+sudo usermod -aG sudo james = add groups with existing secondary groups
+cat /etc/passwd
+groups james
+userdel u1 = delete user without deleting home directory
+cat /etc/passwd
+cd /home/
+pwd
+ll
+cat /etc/passwd
+sudo userdel -r james = delete user with it's home directory
+
+48. Creating Admin Users
+=========================
+
+useradd -m -s /bin/bash toor
+passwd toor
+usermod -aG sudo toor
+su toor
+sudo cat /etc/shadow
+
+49. Group Management (groupadd, groupdel, groupmod)
+=======================================================
+groupadd engineering = create a new group
+groupmod -n engineers engineering = change groupname
+groupdel engineers = delete a group
+
+
+50. User Account Monitoring (whoami, who am i, who, id, w, uptime, last)
+========================================================================
+RUID = Real User ID is the user who initially logs in
+EUID = Effective User ID is the current user in the shell
+
+whoami = EUID
+who = RUID
+who -H
+who -a
+w = user and current process
+id = print EUID and it's groups
+cat /var/run/utmp = logs the current users in the system
+cat /var/log/wtmp = logs all the logged in and logged out users in the past
+last = display login, logout and reboot information. reads wtmp file
+
+
+51. Understanding File Permissions 
+=================================================
+
+-rw-r--r-- 1 root root 1871 Nov  6 16:31 /etc/passwd
+rw- = first 3 shows owener permission
+r-- = second 3 shows group permission
+r-- = last 3 shows other user's permission
+w > users.txt
+ls -l users.txt
+-rw-r--r-- 1 dany dany 316 Nov  8 16:46 users.txt
+chmod u-r users.txt = omit read permission from user
+chmod u-w users.txt = omit write permission from user
+ifconfig > interfaces.txt
+chmod 000 interfaces.txt
+
+52. Octal (Numeric) Notation of File Permissions
+=================================================
+r (read) = 4
+w (write) = 2
+x (execute) = 1
+- (no permissions) = 0
+
+53. Changing File Permissions (chmod)
+=======================================
+syntax: chmod [who][OPERATOR][permission] filename
+chmod u-w users.txt
+chmod u-x,g+w,o-rwx users.txt = modify user,group,other permission
+chmod ug-r,u+x,o-rwx users.txt = modify user+group,group,other permission
+chmod a+r,a-wx users.txt = modify all permission together
+chmod ug=rw,o= users.txt
+chmod 644 users.txt
+chmod 777 users.txt
+chmod 400 users.txt
+chmod -R 750 dir1/ = modify file permission recurssively 
+chmod --reference=i.txt interfaces.txt = set permission from i.txt file
+
+
+54. The Effect of Permissions on Directories
+============================================
+
+mkdir -p linux/ubuntu
+who -a > linux/users.txt
+tree linus
+tree linux
+chmod 400 linux/
+ls -ld linux/
+ls linux/
+cd linux/
+rm -rf linux/users.txt
+ls -ld linux/
+tree linux/
+alias
+    alias ls='ls --color=auto' = this was the problem
+\ls linux/ = run original ls command
+mv linux/ l = allowed while having only read permission
+mv l linux/
+chmod 600 linux/
+ls linux/ = wont work without execute permission
+cd linux/ = wont work without execute permission
+rm linux/users.txt = wont work without execute permission
+chmod 700 linux = now can do anything
+ls -ld linux/ 
+touch linux/a.txt
+chmod 000 linux/a.txt
+ls -ld linux/
+ls -l linux/a.txt
+rm linux/a.txt = allowed to remove even though file had no permission
+
+55. Combining Find and Chmod Commands Together 
+=================================================
+
+find ~ -type f
+find ~ -type f -exec chmod 640 {} \; = find file type and change permission to 640
+find ~ -type d -exec chmod 750 {} \; = find directory type and change permission to 750
+find ~ -type d -ls
+find ~ -type f -ls
+
+
+56. Changing File Ownership (chown, chgrp) 
+==========================================
+# chown and 
+lscpu > cpu.txt
+ls -l cpu.txt
+pwd
+tail /etc/passwd
+chown toor cpu.txt = only root can run chown command
+sudo chown toor cpu.txt
+ls -l cpu.txt
+sudo chown toor cpu.txt interfaces.txt linux/ = change file and directory type ownership together
+ls -l
+cat /etc/passwd
+sudo chown 1005 cpu.txt = modify with user ID but if there is a username with 1005 it will change to 1005 user not the group
+ls -l
+sudo chown +1005 cpu.txt = modify specificaly with group ID
+ls -l cpu.txt
+sudo chown dany:daemon cpu.txt = change user and group 
+ls -l cpu.txt
+sudo chown dany.daemon cpu.txt = some linux distribute allow this
+sudo chgrp sudo cpu.txt = change group
+ls -l cpu.txt
+sudo chown :sudo cpu.txt = change group with chown command
+ls -l cpu.txt
+sudo chown -R dany:dany ~ = recurssively change the permission
+ls -l
+
+57. Understanding SUID (Set User ID)
+=======================================
+
+which cat
+ls -l /usr/bin/cat # owener is root but cat will run with user permission
+
+# sudo chmod 4755 /usr/bin/cat
+# ls -l /usr/bin/cat
+-rwsr-xr-x 1 root root 39464 Jul 31 15:24 /usr/bin/cat
+# sudo chmod u-x /usr/bin/cat
+# ls -l /usr/bin/cat
+-rwSr-xr-x 1 root root 39464 Jul 31 15:24 /usr/bin/cat
+# sudo chmod u+x /usr/bin/cat
+# ls -l /usr/bin/cat
+-rwsr-xr-x 1 root root 39464 Jul 31 15:24 /usr/bin/cat
+# stat /usr/bin/cat
+  File: /usr/bin/cat
+  Size: 39464           Blocks: 80         IO Block: 4096   regular file
+Device: 253,1   Inode: 1699        Links: 1
+Access: (4755/-rwsr-xr-x)  Uid: (    0/    root)   Gid: (    0/    root)
+Access: 2024-12-10 15:55:16.033017000 +0000
+Modify: 2024-07-31 15:24:19.000000000 +0000
+Change: 2024-12-10 18:05:19.737831640 +0000
+ Birth: 2024-10-09 17:26:21.295403873 +0000
+
+
+
+58. Understanding SGID (Set Group ID)
+========================================
+# effective for shared directories at group level. because the files and directory that are created inside that directory will be owned by the same group owner of the directory where SGID was configured.
+
+# Setting SGID:
+
+# Absolute Mode: chmod 2XXX directory
+# Relative Mode: chmod g+s directory
+
+# groupadd programmers
+# useradd -s /bin/bash pr1
+# useradd -s /bin/bash pr2
+# usermod -aG programmers pr1
+# usermod -aG programmers pr2
+# mkdir /programming
+# chown pr1:programmers /programming/
+# chmod 770 /programming/
+# su pr1
+
+# su pr1
+# id
+# cd /programming/
+# touch source1.cpp
+# exit
+
+# chmod 2770 /programming/
+# chmod g+s /programming/
+# ls -ld /programming/
+# stat /programming/
+
+# su pr2
+# cd /programming/
+# touch source2.cpp
+# mkdir golang python
+# ls
+# ls -l
+# history
+
+59. Understanding the Sticky Bit
+==================================
+
+# chmod 1777 /tmp/
+# chmod o+t /tmp/
+
+# (now one user cannot delete other users file)
+
+60. Umask 
+==========
+
+Default creation permissions:
+0666 for files
+0777 for directories
+# umask
+0022
+ 
+# umask 0002
+
+# (This value will only apply to the current terminal)
+# (To permanently add umask value:)
+# vim ~/.bashrc
+umask 0222
+
+61. Understanding Files Attributes (lsattr, chattr) 
+===================================================
+
+# mkdir -p dir1/dir2
+# touch dir1/a.txt dir1/dir2/b.txt
+# ip addr > i.txt
+# touch user.txt
+# chattr +a user.txt #append only (a)
+# lsattr user.txt
+# ls > user.txt
+# ls >> user.txt
+# cat user.txt
+# cat frontline.txt
+# stat user.txt
+# chattr +A user.txt #no atime updates (A)
+# lsattr user.txt
+# ls user.txt
+# stat user.txt
+# cat i.txt
+# chattr +i i.txt #immutable (i)
+# rm -rf i.txt
+# ls > i.txt
+# chmod 700 i.txt
+# chattr -R +i dir1/
+# rm -rf dir1/
+# chattr -R -i dir1/
+# chattr -R -i i.txt
+# rm -rf i.txt
+# rm -rf dir1/
+
+62. Processes and The Linux Security Model
+==========================================
+
+A running instance of a program is called a process and it runs in its own memory space. Each time you execute a command, a new process starts.
+A process is an active entity as opposed to a program, which is considered to be a passive entity.
+A new process is created only when running an executable file (not when running Shell built-in commands).
+
+Process properties:
+-------------------
+- PID (Process ID) - a unique positive integer number
+- User
+- Group
+- Priority / Nice
+
+Type of Processes:
+-------------------
+- Parent = is the process that has created one or more child processes
+- Child = has only one parent
+    example: bash is the parent of the process - ls, who
+- Daemon
+- Zombie (defunct)
+- Orphan
+
+the OS maintains a table that associates every process to the data necessary for its function. when a process terminates it's execution the OS releases most of its resources and information related to that process. The terminated process who's data has not been collected is called a Zombie (defunct) process.
+
+Orphan is the opposite. In this case the parent process is terminated before the child processes
+
+# ls -lR /
+
+if we close the terminal while this command is running then the parent process is dead
+
+Thread = Multiple thread can exists within the same process and the share resources such as memory, while different processes do not share this resources. Threads are basically sub processes that run in the same memory context of a single process and make the application responsive. Threads may share the same data while executing.
+
+63. Listing Processes (ps, pstree)
+====================================
+
+# ps = process status
+  PID = Process ID
+  TTY = name of the controlling terminal controlling the process
+  TIME = commulated CPU time
+  CMD = name of the karnel that starts the process
+
+-e = displays all processes
+-f = full status
+
+# ps -ef
+# ps -ef | wc -l
+# ps -ef | less
+   UID = user who runs the process
+   PID = process id
+   PPID = parent process id
+   C = 
+   STIME = starting time of the process
+   TTY = ? = either a syestem process or a daemon that does not have a terminal
+   TIME
+   CMD
+
+# ps aux | less
+  USER
+  PID
+  %CPU = CPU Utilization of the process
+  %MEM = how much mem the process is using
+  VSZ = Vim Shell Memory size in KB. it includes all the memory that the process can access including the mem that is swaped out, the mem that is allocated but not used, and the memory that is from the shared library
+  RSS = Size of the physical memory that the process is using. indicates how much mem is allocated to the process. Doesn't include mem that is swaped out but includes the memory from shared libraries as long as they are actually in the mem. it does include all stack and heap mem.
+  TTY
+  STAT = incdicates the process state using a code.
+    S = sleeping
+    R = running
+    Z = Zombie
+    T = stuck
+    I = idle kernel thread
+    < = high priority
+    N - low priority
+  START
+  TIME
+  COMMAND
+
+# ps aux --sort=%mem | less # sort by memory ASC
+# ps aux --sort=-%mem | less # sort by memory DESC
+# ps -f -u root # specific user
+# ps -ef | grep sshd
+
+process IDs of selected critera
+# pgrep sshd
+# pgrep python3
+# pgrep systemd
+# pgrep -l systemd
+# pgrep -u root sshd
+# pstree | less
+# pstree -c | less
+
+64. Getting a Dynamic Real-Time View of the Running System (top, htop)
+
+# top
+1 = multi core cpu View
+d = enter new refresh value
+x & y = sort
+b = bold the sorting
+R = reverse order
+e = output in bytes, MB, GB, TB, PB
+P = sort by processor or CPU
+M = sort by memory
+u = select user
+f = add or remove column [not saved the config]
+  - space key to select or deselect
+  - to reorder - press right arrow then up and down to move
+W = save the customized output
+
+# top -d 1 -n 3 -b > top_processes.txt
+    - d = delay
+    - n = iterations
+    - b = starts top in batch mode
+
+65. Signals and Killing Processes (kill, pkill, killall, pidof)
+
+# kill -l
+# pgrep -l dockerd
+# kill -2 1129
+# pidof dockerd
+# kill -INT 1650 1179
+# kill -SIGINT $(pidof dockerd)
+
+66. Foreground and Background Processes 
+67. Job Control (jobs, fg, bg 
+68. Getting Information about the Network Interfaces (ip, ifconfig
+69. Configuring the Network On The Fly (ifconfig, ip, route) 
+70. Setting Up Static IP on Ubuntu (netplan)
+71. Testing and Troubleshooting Network Connectivity 
+72. Using SSH 
+73. Troubleshooting SSH 
+74. Securing the OpenSSH Server (sshd) 
+75. Copying Files Over the Network (scp)
+76. Synchronizing Files and Directories using rsync 
+77. Using rsync Over the Network 
+78. Using wget 
+79. Checking for Listening Ports (netstat, ss, lsof, telnet, nmap) 
+80. DPKG (Debian and Ubuntu Based Distros) 
+81. Intro to APT 
+82. Using APT (Advanced Package Tool) 
+83. Compiling Programs from Source Code vs. Package Manager 
+84. Compiling C Programs 
+85. Compiling Software From Source Code: Lab ProFTPD 
+86. Task Automation and Scheduling Using Cron (crontab) 
+87. Scheduling Tasks Using Anacron (anacron) 
+88. Mounting and Unmounting File Systems (df, mount, umount, fdisk, gparted) 
+89. Working With Device Files (dd) 
+90. Getting System Hardware Information (lwhw, lscpu, lsusb, lspci, dmidecode, hdparm) 
+91. Intro to systemd 
+92. Service Management (systemd and systemctl) 
+93. Bash Aliases 
+94. Intro to Bash Shell Scripting 
+95. The Bash Shebang and Comments 
+96. Running Scripts 
+97. Variables in Bash 
+98. Environment Variables 
+99. Getting User Input 
+100. Special Variables and Positional Arguments
+101. If, Elif and Else Statements 
+102. Testing Conditions For Numbers 
+103. Multiple Conditions and Nested If Statements 
+104. Command Substitution 
+105. Comparing Strings in If Statements 
+106. Lab: Testing Network Connections 
+107. For Loops
+108. Lab: Dropping a List of IP addresses Using a For Loop
+109. While Loops 
+110. Case Statement
+111. Functions in Bash 
+112. Variable Scope in Functions 
+113. Menus in Bash. The Select Statement 
+114. Lab: System Administration Script using Menus
+115. Running a Linux Server in the Cloud 
+116. Securing SSH with Key Authentication 
+117. Project Overview 
+118. What is Docker? Why use it?
+119. Installing Docker 
+120. The Docker Client 
+121. Pulling Images and Running Containers 
+122. Lab: Running a Web Server in a Docker Container
+123. Listing Images and Containers 
+124. Removing Images and Containers 
+125. Getting Shell Access to a Container
+126. Executing Commands in a Running Container 
+127. Getting Information about the Running Containers 
+128. Committing Container Changes into a New Image 
+129. Tagging and Pushing Custom Images to Docker Hub 
+130. Image Structure and Layers 
+131. Creating Custom Images using Dockerfile 
+132. Persistent Data: Volumes 
+133. Project Overview
+134. Linux Security Checklist
+135. Securing the OpenSSH Server (sshd) 
+136. Securing the Boot Loader (Grub) 
+137. Enforcing Password Policy 
+138. Locking or Disabling User Accounts 
+139. Giving Limited root Privileges (sudoers and visudo) - Part 1 
+140. Giving Limited root Privileges (sudoers and visudo) - Part 2 
+141. Setting Users’ Limits (Running a DoS Attack Without root Access)
+142. Intro to Cracking Passwords 
+143. Cracking Linux Passwords Using John the Ripper
+144. Checking Files Integrity with AIDE - Part 1 
+145. Checking Files Integrity with AIDE - Part 2 
+146. Scanning for Rootkits (rkhunter and chkrootkit)
+147. Scanning for Viruses with ClamAV 
+148. Full Disk Encryption Using dm-crypt and LUKS 
+149. Unlocking LUKS Encrypted Drives With A Keyfile
+150. Symmetric Encryption Using GnuPG 
+151. Steganography Explained 
+152. Steganography In Depth
+153. Hide Secret Messages Through Steganography with Steghide 
+154. Scanning Networks with Nmap
+155. Nmap Advanced 
+156. Project Overview: The Big Picture 
+157. Getting a Domain Name 
+158. Diving into the DNS Protocol and Installing a DNS Server (BIND9) 
+159. Setting Up the Authoritative BIND9 DNS Server
+160. Installing a Web Server (Apache2) 
+161. Setting Up Virtual Hosting 
+162. Securing Apache with OpenSSL and Digital Certificates 
+163. Access Control by Source IP Address 
+164. The 'Files' Directive
+165. The .htaccess File 
+166. HTTP Digest Authentication 
+167. The Options Directive and Indexing 
+168. HTTP Compression 
+169. SetHandler and Server Status
+170. Installing PHP 
+171. Installing and Securing the MySql Server 
+172. Installing phpMyAdmin
+173. Securing phpMyAdmin 
+174. Installing a Web Application (WordPress) 
+175. Securing WordPress 
+176. Intro to Ansible 
+177. Prerequisites 
+178. Ansible Inventory File
+179. Ansible Ad-Hoc Commands: The Shell Module
+180. Ansible Ad-Hoc Commands: The Script Module 
+181. Ansible Ad-Hoc Commands: The APT Module
+182. Ansible Ad-Hoc Commands: The Service Module
+183. Ansible Ad-Hoc Commands: The User Module 
+184. What is IPFS and How It Works 
+185. Installing IPFS on Linux
+186. Running an IPFS Node on Linux
+187. Pinning Objects 
+188. SSH Public Key Authentication Overview 
+189. Generating SSH Key Pair on Windows 
+190. Generating SSH Key Pair on Linux 
+191. Configuring SSH Public Key Authentication on Linux 

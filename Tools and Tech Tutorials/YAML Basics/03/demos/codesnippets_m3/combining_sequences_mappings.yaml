@@ -1,0 +1,14 @@
+persons:
+  - name: maaike
+    age: 30
+    address:
+      streetname: YAML streetname
+      number: 1
+      zipcode: 123456
+      city: Programming City
+      country: The Netherlands
+  - name: elias
+    age: 34
+    address: { streetname: YAML streetname, number: 1 }
+
+# example: zipcode here is actually be inside a mapping of mappings, which is inside a sequence item containing some mappings, which is again, inside the sequence.
