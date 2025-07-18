@@ -1,0 +1,21 @@
+# k describe nodes | grep Taint
+# k get pod -n kube-system -o wide
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-toleration
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.20
+
+  tolerations:
+  - effect: "NoSchedule"
+    operator: "Exists"
+  nodeName: master01
+---
+# k get pod pod-with-toleration -o wide

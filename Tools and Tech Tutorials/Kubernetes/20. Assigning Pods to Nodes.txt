@@ -1,0 +1,73 @@
+With selector
+-------------
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-worker01
+spec:
+  nodeName: worker01
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+
+    ---
+
+# k get pod nginx-worker01 -o wide
+# k label node worker02 type=cpu
+# k get nodes --show-labels
+
+With nodeSelector
+-------------
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-worker01
+spec:
+  nodeSelector:
+    type: cpu
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
+---
+
+With node affinity
+-------------
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: with-node-affinity
+spec:
+  containers:
+  - name: myapp
+    image: nginx:1.20
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/os
+            operator: In
+            values:
+            - linux
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: type
+            operator: In
+            values:
+            - cpu
+
+---
+
+# k get pod with-node-affinity -o wide

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-worker01
+spec:
+  nodeSelector:
+    type: cpu
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80
