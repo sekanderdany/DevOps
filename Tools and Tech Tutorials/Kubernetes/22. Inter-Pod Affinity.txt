@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: myapp
+spec:
+    replicas: 5
+    selector:
+        matchLabels:
+            app: myapp
+    template:
+        metadata:
+            labels:
+                app: myapp
+        spec:
+            containers:
+            - name: myapp-container
+                image: nginx:1.20
+            nodeSelector:
+                type: master01
+            tolerations:
+            - effect: NoSchedule
+              operator: Exists
+            affinity:
+                podAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchExpressions:
+                        - key: app
+                          operator: In
+                          values:
+                          - etcd
+                      topologyKey: "kubernetes.io/hostname"
+                podAntiAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchExpressions:
+                        - key: app
+                          operator: In
+                          values:
+                          - myapp
+                      topologyKey: "kubernetes.io/hostname"
+
+---
+# Summary: Node Affinity vs Inter-Pod Affinity
+
+# Node Affinity:
+# - Controls which NODES pods are scheduled on
+# - Based on node labels and properties
+# - Uses nodeSelector or affinity.nodeAffinity
+# - Example: Schedule pods only on nodes with specific hardware, zones, or labels
+# - Relationship: Pod-to-Node
+
+# Inter-Pod Affinity:
+# - Controls pod placement relative to OTHER PODS
+# - Based on existing pod labels and locations
+# - Uses affinity.podAffinity and affinity.podAntiAffinity
+# - Example: Schedule pods near database pods (affinity) or spread replicas across nodes (anti-affinity)
+# - Relationship: Pod-to-Pod
+
+# Key Differences:
+# 1. Scope: Node Affinity targets nodes, Pod Affinity targets pod relationships
+# 2. Use Cases: Node Affinity for hardware/zone requirements, Pod Affinity for service dependencies
+# 3. Performance: Node Affinity is simpler, Pod Affinity requires evaluating existing pod placements

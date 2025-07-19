@@ -1,0 +1,303 @@
+KUBERNETES DEPLOYMENT STRATEGIES
+
+1. RECREATE STRATEGY
+    - Terminates all existing pods before creating new ones
+    - Results in downtime during deployment
+    - Simple but not suitable for production environments
+    - Use case: Development/testing environments
+
+2. ROLLING UPDATE STRATEGY (Default)
+    - Gradually replaces old pods with new ones
+    - Zero downtime deployment
+    - Configurable with maxSurge and maxUnavailable parameters
+    - Use case: Most production applications
+
+3. BLUE-GREEN DEPLOYMENT
+    - Maintains two identical environments (Blue=current, Green=new)
+    - Traffic switches from Blue to Green after validation
+    - Instant rollback capability
+    - Requires double resources
+    - Use case: Critical applications requiring instant rollback
+
+4. CANARY DEPLOYMENT
+    - Deploys new version to small subset of users/pods
+    - Gradually increases traffic to new version
+    - Allows monitoring and testing with real traffic
+    - Can be combined with service mesh for advanced traffic splitting
+    - Use case: Risk-averse deployments, A/B testing
+
+5. A/B TESTING
+    - Runs multiple versions simultaneously
+    - Routes traffic based on user attributes or random selection
+    - Compares performance metrics between versions
+    - Use case: Feature validation, user experience optimization
+
+KEY CONSIDERATIONS:
+- Resource requirements
+- Rollback strategy
+- Monitoring and observability
+- Traffic routing capabilities
+- Risk tolerance
+
+EXAMPLE CONFIGURATIONS:
+
+1. RECREATE STRATEGY
+-----------------------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-recreate
+spec:
+    strategy:
+        type: Recreate
+    replicas: 3
+    selector:
+        matchLabels:
+            app: myapp
+    template:
+        metadata:
+            labels:
+                app: myapp
+        spec:
+            containers:
+            - name: app
+                image: myapp:v2
+---
+2. ROLLING UPDATE STRATEGY
+-----------------------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: nginx-deployment
+spec:
+    strategy:
+        type: RollingUpdate
+        rollingUpdate:
+            maxSurge: 1
+            maxUnavailable: 1
+    replicas: 5
+    selector:
+        matchLabels:
+            app: myapp
+    template:
+        metadata:
+            labels:
+                app: myapp
+        spec:
+            containers:
+            - name: app
+                image: myapp:v2
+---
+3. BLUE-GREEN DEPLOYMENT
+-----------------------
+# Blue deployment (current)
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-blue
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: myapp
+            version: blue
+    template:
+        metadata:
+            labels:
+                app: myapp
+                version: blue
+        spec:
+            containers:
+            - name: app
+                image: myapp:v1
+
+---
+# Green deployment (new)
+-----------------------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-green
+spec:
+    replicas: 3
+    selector:
+        matchLabels:
+            app: myapp
+            version: green
+    template:
+        metadata:
+            labels:
+                app: myapp
+                version: green
+        spec:
+            containers:
+            - name: app
+                image: myapp:v2
+
+---
+# Service (switch selector from blue to green)
+-----------------------
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: app-service
+spec:
+    selector:
+        app: myapp
+        version: blue  # Change to 'green' to switch traffic
+    ports:
+    - port: 80
+        targetPort: 8080
+---
+4. CANARY DEPLOYMENT
+-----------------------
+---
+# Main deployment (90% traffic)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-stable
+spec:
+    replicas: 9
+    selector:
+        matchLabels:
+            app: myapp
+            version: stable
+    template:
+        metadata:
+            labels:
+                app: myapp
+                version: stable
+        spec:
+            containers:
+            - name: app
+                image: myapp:v1
+
+---
+# Canary deployment (10% traffic)
+-----------------------
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: app-canary
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: myapp
+            version: canary
+    template:
+        metadata:
+            labels:
+                app: myapp
+                version: canary
+        spec:
+            containers:
+            - name: app
+                image: myapp:v2
+
+---
+# Service routing to both versions
+-----------------------
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: app-service
+spec:
+    selector:
+        app: myapp  # Routes to both stable and canary
+    ports:
+    - port: 80
+        targetPort: 8080
+
+5. A/B TESTING WITH ISTIO
+-----------------------
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+    name: app-ab-test
+spec:
+    http:
+    - match:
+        - headers:
+                user-type:
+                    exact: premium
+        route:
+        - destination:
+                host: app-service
+                subset: v2
+    - route:
+        - destination:
+                host: app-service
+                subset: v1
+            weight: 70
+        - destination:
+                host: app-service
+                subset: v2
+            weight: 30
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+    name: app-destination
+spec:
+    host: app-service
+    subsets:
+    - name: v1
+        labels:
+            version: v1
+    - name: v2
+        labels:
+            version: v2
+---
+
+DEPLOYMENT STRATEGY COMMANDS
+
+1. RECREATE STRATEGY COMMANDS
+kubectl apply -f recreate-deployment.yaml
+kubectl rollout status deployment/app-recreate
+# Use when downtime is acceptable and you need a clean slate deployment
+
+2. ROLLING UPDATE COMMANDS
+kubectl apply -f rolling-deployment.yaml
+kubectl rollout status deployment/nginx-deployment
+kubectl rollout history deployment/nginx-deployment
+kubectl rollout undo deployment/nginx-deployment
+# Use for zero-downtime deployments in production environments
+
+3. BLUE-GREEN DEPLOYMENT COMMANDS
+kubectl apply -f blue-deployment.yaml
+kubectl apply -f green-deployment.yaml
+kubectl patch service app-service -p '{"spec":{"selector":{"version":"green"}}}'
+kubectl delete deployment app-blue
+# Use when you need instant rollback capability and can afford double resources
+
+4. CANARY DEPLOYMENT COMMANDS
+kubectl apply -f stable-deployment.yaml
+kubectl apply -f canary-deployment.yaml
+kubectl scale deployment app-canary --replicas=3  # Increase canary traffic
+kubectl delete deployment app-canary  # Remove canary after validation
+# Use when you want to test new versions with minimal risk and real traffic
+
+5. A/B TESTING COMMANDS
+kubectl apply -f ab-virtualservice.yaml
+kubectl apply -f ab-destinationrule.yaml
+istioctl proxy-config route <pod-name> --name 80
+# Use when comparing feature performance or conducting user experience experiments
+
+MONITORING AND TROUBLESHOOTING COMMANDS
+kubectl get deployments
+kubectl describe deployment <deployment-name>
+kubectl logs -f deployment/<deployment-name>
+kubectl get pods -l app=myapp --show-labels
+kubectl get events --sort-by=.metadata.creationTimestamp
+# Use these commands to monitor deployment progress and troubleshoot issues

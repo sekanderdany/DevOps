@@ -1,0 +1,132 @@
+Liveness Probes:
+- Used to check if a pod is running.
+- If a liveness probe fails, Kubernetes will restart the pod.
+
+1️⃣ Exec Probes
+Use when: You want to run a command inside the container to verify health.
+How it works: Kubelet executes the specified command.
+
+---
+livenessProbe:
+  periodSeconds: 5
+  exec:
+    command: ["cat", "/tmp/healthy"]
+---
+
+2️⃣ TCP Socket Probes
+Use when: Your app listens on a TCP port.
+How it works: Kubelet tries to open a TCP connection to the container.
+
+---
+livenessProbe:
+  periodSeconds: 5
+  tcpSocket:
+    port: 3000
+---
+
+3️⃣ HTTP GET Probes
+Use when: Your app exposes an HTTP endpoint.
+How it works: Kubelet sends an HTTP GET request to the specified path and port.
+
+---
+livenessProbe:
+  periodSeconds: 5
+  httpGet:
+    path: /health
+    port: 80
+---
+4️⃣ GRPC Probes
+Use when: Your app uses gRPC for communication.
+How it works: Kubelet sends a gRPC request to the specified service and method.
+
+---
+livenessProbe:
+  periodSeconds: 5
+  grpc:
+    port: 50051
+    service: myservice
+    method: MyMethod
+---
+
+Readiness Probes:
+- Used to check if a pod is ready to serve traffic.
+- If a readiness probe fails, the pod will be removed from the service endpoints.
+
+1️⃣ Exec Probes
+Use when: You want to run a command to verify if the app is ready to serve traffic.
+How it works: Kubelet executes the command inside the container.
+
+---
+readinessProbe:
+  periodSeconds: 5
+  exec:
+    command: ["cat", "/tmp/ready"]
+---
+
+2️⃣ TCP Socket Probes
+Use when: Your app becomes ready once it starts listening on a TCP port.
+How it works: Kubelet tries to establish a TCP connection.
+
+---
+readinessProbe:
+  periodSeconds: 5
+  tcpSocket:
+    port: 3000
+---
+
+3️⃣ HTTP GET Probes
+Use when: Your app exposes a ready-check HTTP endpoint.
+How it works: Kubelet sends an HTTP GET request to the path and port.
+
+---
+readinessProbe:
+  periodSeconds: 5
+  httpGet:
+    path: /ready
+    port: 80
+---
+4️⃣ GRPC Probes
+Use when: Your app uses gRPC and has a method to check readiness.
+How it works: Kubelet sends a gRPC request to the specified service and method.
+
+---
+readinessProbe:
+  periodSeconds: 5
+  grpc:
+    port: 50051
+    service: myservice
+    method: MyMethod
+---
+# Example Deployment with Probes
+----------------------
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-health-probes
+spec:
+  automountServiceAccountToken: false
+  containers:
+  - name: myapp
+    image: nginx:1.20
+    ports:
+    - containerPort: 80
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+        ephemeral-storage: 1Gi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+    readinessProbe:
+      tcpSocket:
+        port: 80
+      initialDelaySeconds: 10
+      periodSeconds: 5
+    livenessProbe:
+      tcpSocket:
+        port: 80
+      initialDelaySeconds: 5
+      periodSeconds: 5
+---

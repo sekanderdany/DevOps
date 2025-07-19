@@ -1,0 +1,142 @@
+ETCD Backup and Restore Tutorial
+=====================================
+
+ETCD is the key-value store that Kubernetes uses to store all cluster data. 
+Regular backups are crucial for disaster recovery.
+
+Prerequisites
+-------------
+- Install etcdctl utility
+  - sudo snap install etcd         # version 3.4.36, or
+  - sudo apt  install etcd-client  # version 3.2.26+dfsg-6ubuntu0.2
+- Access to the master node
+- etcdctl utility installed
+- Admin privileges
+
+1. ETCD BACKUP PROCEDURE
+========================
+
+Step 1: Check ETCD Status
+-------------------------
+# kubectl get pods -n kube-system | grep etcd
+
+# cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep etcd
+# cat /etc/kubernetes/manifests/etcd.yaml
+
+Step 2: Find ETCD Endpoints and Certificates
+--------------------------------------------
+# Check etcd pod configuration
+kubectl describe pod etcd-master -n kube-system
+
+# Common certificate locations:
+# --cert-file=/etc/kubernetes/pki/etcd/server.crt
+# --key-file=/etc/kubernetes/pki/etcd/server.key
+# --trusted-ca-file=/etc/kubernetes/pki/etcd/ca.crt
+
+Step 3: Create Backup
+--------------------
+ETCDCTL_API=3 etcdctl snapshot save /backup/etcd-backup-$(date +%Y%m%d).db \
+    --endpoints=https://127.0.0.1:2379 \
+    --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+    --cert=/etc/kubernetes/pki/etcd/server.crt \
+    --key=/etc/kubernetes/pki/etcd/server.key
+
+Step 4: Verify Backup
+--------------------
+ETCDCTL_API=3 etcdctl snapshot status /backup/etcd-backup-$(date +%Y%m%d).db
+
+2. ETCD RESTORE PROCEDURE
+=========================
+
+Step 1: Stop Kubernetes Components
+----------------------------------
+# Stop kubelet
+systemctl stop kubelet
+
+# Move current etcd data directory
+mv /var/lib/etcd /var/lib/etcd.bak
+
+Step 2: Restore from Backup
+---------------------------
+ETCDCTL_API=3 etcdctl snapshot restore /backup/etcd-backup-20231201.db \
+    --data-dir=/var/lib/etcd \
+    --name=master \
+    --initial-cluster=master=https://127.0.0.1:2380 \
+    --initial-cluster-token=etcd-cluster-1 \
+    --initial-advertise-peer-urls=https://127.0.0.1:2380
+
+Step 3: Set Correct Ownership
+-----------------------------
+chown -R etcd:etcd /var/lib/etcd
+
+Step 4: Restart Services
+-----------------------
+systemctl start kubelet
+systemctl start docker
+
+Step 5: Verify Cluster Status
+-----------------------------
+kubectl get nodes
+kubectl get pods --all-namespaces
+
+3. AUTOMATED BACKUP SCRIPT
+===========================
+
+#!/bin/bash
+# etcd-backup.sh
+
+BACKUP_DIR="/backup/etcd"
+DATE=$(date +%Y%m%d_%H%M%S)
+BACKUP_FILE="$BACKUP_DIR/etcd-backup-$DATE.db"
+
+# Create backup directory
+mkdir -p $BACKUP_DIR
+
+# Create backup
+ETCDCTL_API=3 etcdctl snapshot save $BACKUP_FILE \
+    --endpoints=https://127.0.0.1:2379 \
+    --cacert=/etc/kubernetes/pki/etcd/ca.crt \
+    --cert=/etc/kubernetes/pki/etcd/server.crt \
+    --key=/etc/kubernetes/pki/etcd/server.key
+
+# Verify backup
+if ETCDCTL_API=3 etcdctl snapshot status $BACKUP_FILE; then
+    echo "Backup successful: $BACKUP_FILE"
+    
+    # Remove backups older than 7 days
+    find $BACKUP_DIR -name "*.db" -mtime +7 -delete
+else
+    echo "Backup failed!"
+    exit 1
+fi
+
+4. SCHEDULING AUTOMATED BACKUPS
+===============================
+
+Add to crontab (crontab -e):
+# Daily backup at 2 AM
+0 2 * * * /usr/local/bin/etcd-backup.sh
+
+5. BEST PRACTICES
+=================
+
+- Take backups before major changes
+- Store backups in multiple locations
+- Test restore procedures regularly
+- Monitor backup success/failure
+- Keep multiple backup versions
+- Document recovery procedures
+
+6. TROUBLESHOOTING
+==================
+
+Common Issues:
+- Certificate path errors: Verify cert locations
+- Permission denied: Check file ownership
+- Connection refused: Ensure etcd is running
+- Restore fails: Check data directory permissions
+
+Verification Commands:
+- kubectl cluster-info
+- kubectl get componentstatuses
+- kubectl get nodes

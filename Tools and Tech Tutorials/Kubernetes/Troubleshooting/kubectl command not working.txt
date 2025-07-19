@@ -3,6 +3,9 @@ sudo kubectl drain worker02 --ignore-daemonsets --delete-emptydir-data
 sudo kubectl uncordon worker01
 sudo kubectl uncordon worker02
 
+T1:
+--------------------
+
 # unset KUBECONFIG
 # mkdir -p /~/.kube
 # cp -i /etc/kubernetes/admin.conf /~/.kube/config
