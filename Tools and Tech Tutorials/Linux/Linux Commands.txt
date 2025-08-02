@@ -878,7 +878,7 @@ process IDs of selected critera
 # pstree -c | less
 
 64. Getting a Dynamic Real-Time View of the Running System (top, htop)
-
+=============================================================
 # top
 1 = multi core cpu View
 d = enter new refresh value
@@ -900,7 +900,7 @@ W = save the customized output
     - b = starts top in batch mode
 
 65. Signals and Killing Processes (kill, pkill, killall, pidof)
-
+========================================================
 # kill -l
 # pgrep -l dockerd
 # kill -2 1129
@@ -908,9 +908,28 @@ W = save the customized output
 # kill -INT 1650 1179
 # kill -SIGINT $(pidof dockerd)
 
-66. Foreground and Background Processes 
+66. Foreground and Background Processes
+========================================================
+
 67. Job Control (jobs, fg, bg 
 68. Getting Information about the Network Interfaces (ip, ifconfig
+===========================================================
+# sudo apt-get install net-tools 
+# ifconfig
+# ifconfig -a = show all interfaces
+# ip address show
+# ip -4 addr
+# ip -6 addr
+# ip a s dev enp0s6 = show information about the specific interface
+# route -n
+# ip route show
+# ip route show default
+# systemd-resolve --status
+# resolvectl status
+# systemctl status systemd-resolved
+# ip link show
+
+
 69. Configuring the Network On The Fly (ifconfig, ip, route) 
 70. Setting Up Static IP on Ubuntu (netplan)
 71. Testing and Troubleshooting Network Connectivity 

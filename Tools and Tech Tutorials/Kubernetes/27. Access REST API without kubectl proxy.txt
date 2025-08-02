@@ -1,0 +1,81 @@
+# kubectl create sa myscript
+
+# vim script-role.yaml
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: myscript-role
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["get", "list", "delete"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list", "delete"]
+---
+
+# kubectl apply -f script-role.yaml
+
+# kubectl create rolebinding script-role-binding --role=script-role --serviceaccount=default:myscript
+
+# vim myscript-secret.yaml
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: myscript-token
+  namespace: default
+  annotations:
+    kubernetes.io/service-account.name: myscript
+type: kubernetes.io/service-account-token
+---
+# kubectl apply -f myscript-secret.yaml
+
+dany@master01:~$ k describe secrets myscript-token
+Name:         myscript-token
+Namespace:    default
+Labels:       <none>
+Annotations:  kubernetes.io/service-account.name: myscript
+              kubernetes.io/service-account.uid: 5912860f-92b3-40f2-a42a-6546774b43dd
+
+Type:  kubernetes.io/service-account-token
+
+Data
+====
+ca.crt:     1107 bytes
+namespace:  7 bytes
+token:      eyJhbGciOiJSUzI1NiIsImtpZCI6ImFBUXplbWZCMXU1X1dVOENhUk9RMWVkaERvZ0FFTVhuRG1HcDg0QndnV0UifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6Im15c2NyaXB0LXRva2VuIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6Im15c2NyaXB0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiNTkxMjg2MGYtOTJiMy00MGYyLWE0MmEtNjU0Njc3NGI0M2RkIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6bXlzY3JpcHQifQ.H9h4F2rH--sjX4clePX-1NoEYrbLLnQwxUpS1wPxkeJUEldlluansJVjFGd0kBRlsMAgo029tJsHn2Nt31EmRDUwzOkI8HiuOvyntrb219MH1_ZCTIgtK-6skorbU4ktwrP0Np9ZaKH_PWYX_NaNjqF8dGOpKocr91dMw9pkt2PptPeJ-s12-5KWaug9g1TmktNssyK4kMW11mXxa-MU38IZJYZgY2q8PSQ8lSzIdj9uWBoEy9jfZgoly0cj42lLbTyUnkPN9nbhl1kncWBbZWvxFf_O3-mfcX9N7uz7r3y9VsXXnHU0RR_Kgt5iC8ED31sLwpwtXNDrtBX7eLXRGQ
+
+
+# TOKEN=eyJhbGciOiJSUzI1NiIsImtpZCI6ImFBUXplbWZCMXU1X1dVOENhUk9RMWVkaERvZ0FFTVhuRG1HcDg0QndnV0UifQ.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6Im15c2NyaXB0LXRva2VuIiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQubmFtZSI6Im15c2NyaXB0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZXJ2aWNlLWFjY291bnQudWlkIjoiNTkxMjg2MGYtOTJiMy00MGYyLWE0MmEtNjU0Njc3NGI0M2RkIiwic3ViIjoic3lzdGVtOnNlcnZpY2VhY2NvdW50OmRlZmF1bHQ6bXlzY3JpcHQifQ.H9h4F2rH--sjX4clePX-1NoEYrbLLnQwxUpS1wPxkeJUEldlluansJVjFGd0kBRlsMAgo029tJsHn2Nt31EmRDUwzOkI8HiuOvyntrb219MH1_ZCTIgtK-6skorbU4ktwrP0Np9ZaKH_PWYX_NaNjqF8dGOpKocr91dMw9pkt2PptPeJ-s12-5KWaug9g1TmktNssyK4kMW11mXxa-MU38IZJYZgY2q8PSQ8lSzIdj9uWBoEy9jfZgoly0cj42lLbTyUnkPN9nbhl1kncWBbZWvxFf_O3-mfcX9N7uz7r3y9VsXXnHU0RR_Kgt5iC8ED31sLwpwtXNDrtBX7eLXRGQ
+
+
+# k config view
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: DATA+OMITTED
+    server: https://192.168.0.175:6443
+  name: kubernetes
+contexts:
+- context:
+    cluster: kubernetes
+    user: kubernetes-admin
+  name: kubernetes-admin@kubernetes
+current-context: kubernetes-admin@kubernetes
+kind: Config
+preferences: {}
+users:
+- name: kubernetes-admin
+  user:
+    client-certificate-data: DATA+OMITTED
+    client-key-data: DATA+OMITTED
+
+# SERVER=https://192.168.0.175:6443
+
+# curl -X GET $SERVER/api --header "Authorization: Bearer $TOKEN" --cacert /etc/kubernetes/pki/ca.crt
+
+# curl -X GET $SERVER/api/v1/namespaces/default/services --header "Authorization: Bearer $TOKEN" --cacert /etc/kubernetes/pki/ca.crt
+

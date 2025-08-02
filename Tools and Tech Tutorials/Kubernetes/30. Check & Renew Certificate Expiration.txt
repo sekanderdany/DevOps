@@ -1,0 +1,10 @@
+# Check Certificate:
+=====================
+# sudo kubeadm certs check-expiration
+# openssl x509 -in /etc/kubernetes/pki/ca.crt -text -noout
+# openssl x509 -in /etc/kubernetes/pki/ca.crt -text -noout | grep Validity -A2
+
+
+# Renew Certificate:
+=====================
+# sudo kubeadm certs renew all

@@ -1,0 +1,44 @@
+# Check current cluster version and available upgrades
+kubeadm version
+
+# Check what versions are available for upgrade
+kubeadm upgrade plan
+
+# Upgrade kubeadm tool itself to the target version
+apt update && apt install -y kubeadm=1.28.x-00
+
+# Apply the upgrade to the control plane
+kubeadm upgrade apply v1.28.x
+
+# Drain the control plane node to safely evict pods
+kubectl drain <control-plane-node> --ignore-daemonsets
+
+# Upgrade kubelet and kubectl on control plane
+apt update && apt install -y kubelet=1.28.x-00 kubectl=1.28.x-00
+
+# Restart kubelet service
+systemctl daemon-reload && systemctl restart kubelet
+
+# Uncordon the control plane node to make it schedulable again
+kubectl uncordon <control-plane-node>
+
+# For worker nodes: Drain the worker node
+kubectl drain <worker-node> --ignore-daemonsets --force
+
+# On worker node: Upgrade kubeadm
+apt update && apt install -y kubeadm=1.28.x-00
+
+# On worker node: Upgrade the node configuration
+kubeadm upgrade node
+
+# On worker node: Upgrade kubelet and kubectl
+apt update && apt install -y kubelet=1.28.x-00 kubectl=1.28.x-00
+
+# On worker node: Restart kubelet
+systemctl daemon-reload && systemctl restart kubelet
+
+# Uncordon the worker node
+kubectl uncordon <worker-node>
+
+# Verify the upgrade was successful
+kubectl get nodes

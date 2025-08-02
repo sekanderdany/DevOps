@@ -1,0 +1,4 @@
+# Set the current context to a specific cluster
+
+# kubectl config set-context --current --namespace=kube-syestem
+

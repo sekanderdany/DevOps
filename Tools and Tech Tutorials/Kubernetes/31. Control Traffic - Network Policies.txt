@@ -1,0 +1,147 @@
+frontend.yaml
+=============
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: frontend
+    namespace: myapp
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: frontend
+    template:
+        metadata:
+            labels:
+                app: frontend
+        spec:
+            containers:
+            - name: node
+              image: node:16-alpine
+              command: ['sh', '-c', 'sleep 3000']
+              ports:
+              - containerPort: 3000
+---
+
+backend.yaml
+============
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: backend
+    namespace: myapp
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: backend
+    template:
+        metadata:
+            labels:
+                app: backend
+        spec:
+            containers:
+            - name: nginx
+              image: nginx:1.21-alpine
+              ports:
+              - containerPort: 80
+---
+
+vim database.yaml
+================
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: database
+    namespace: myapp
+spec:
+    replicas: 2
+    selector:
+        matchLabels:
+            app: database
+    template:
+        metadata:
+            labels:
+                app: database
+        spec:
+            containers:
+            - name: redis
+              image: redis:6-alpine
+              ports:
+              - containerPort: 6379
+---
+
+# k apply -f frontend.yaml
+# k apply -f backend.yaml
+# k apply -f database.yaml
+# k get pods -n myapp
+# kubectl config set-context --current --namespace myapp
+# kubectl get pods
+# kubectl get pods -o wide
+# k exec backend-9f95695b6-25gnl -- sh -c 'nc -v 10.88.30.96 6379'
+# k exec frontend-5dc55df666-pkklz -- sh -c 'nc -v 10.88.30.96 6379'
+# k exec frontend-5dc55df666-pkklz -- sh -c 'nc -v 10.88.5.58 80'
+    10.88.30.96 (10.88.30.96:6379) open
+
+vim np-frontend.yaml
+========================
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+    name: np-frontend
+    namespace: myapp
+spec:
+    podSelector:
+        matchLabels:
+            app: frontend
+    policyTypes:
+    - Egress
+    egress:
+    - to:
+      - podSelector:
+          matchLabels:
+              app: backend
+      ports:
+      - protocol: TCP
+        port: 80
+---
+
+vi np-database.yaml
+========================
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+    name: np-database
+    namespace: myapp
+spec:
+    podSelector:
+        matchLabels:
+            app: database
+    policyTypes:
+    - Ingress
+    - Egress
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+              app: backend
+      ports:
+      - protocol: TCP
+        port: 6379
+---
+
+# k apply -f np-frontend.yaml
+# k apply -f database.yaml
+# k apply -f np-database.yaml
+# k get pods -o wide
+# k exec backend-9f95695b6-25gnl -- sh -c 'nc -v 10.88.5.59 6379'
+# k exec frontend-5dc55df666-pkklz -- sh -c 'nc -v 10.88.5.58 80'
+# k exec database-69ddb6d5dd-8gwxd -- sh -c 'nc -v 10.88.30.95 80' # [now allowed]
+# k exec frontend-5dc55df666-pkklz -- sh -c 'nc -v 10.88.5.59 6379' # [now allowed]
